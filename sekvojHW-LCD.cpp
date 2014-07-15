@@ -1,16 +1,13 @@
-/*
- * SEKVOJ_HW.cpp
- *
- *  Created on: 11.07.2014
- *      Author: user
- */
+/*** PERMANENT SETTINGS***/
+
+#include <sekvojHW-settings.h>
+
+
+/*** ACTUAL CODE ***/
+
 
 #include <Arduino.h>
 #include <sekvojHW.h>
-
-
-
-#include <sekvojHW-settings.h>
 #include <shiftRegisterFast.h>
 
 
@@ -56,7 +53,7 @@
 #define RS_Pin C,2
 #define ENABLE_Pin C,3
 
-#define PIN D,3
+
 
 void sekvojHW::display_start() {
 
@@ -88,7 +85,7 @@ void sekvojHW::display_start() {
 
     _displaycontrol = LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF;
     _displaycontrol |= LCD_DISPLAYON;
-    display_sendCommand( LCD_DISPLAYON | _displaycontrol );
+    display_sendCommand( LCD_DISPLAYCONTROL | _displaycontrol );
 
     display_clear();
 
@@ -96,7 +93,8 @@ void sekvojHW::display_start() {
     _displaymode = LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT;
     display_sendCommand(LCD_ENTRYMODESET | _displaymode);
 
-    display_sendData(65);
+    _displaycontrol |= LCD_BLINKON;
+    display_sendCommand(LCD_DISPLAYCONTROL | _displaycontrol);
 
     bit_clear(PIN);
 
@@ -115,6 +113,12 @@ void sekvojHW::display_sendData(uint8_t data) {
 }
 
 void sekvojHW::display_send(uint8_t byte) {
+
+	bit_set(PIN);
+	Serial.println(byte,HEX);
+	//Serial.println("x");
+	bit_clear(PIN);
+
 	shiftRegFast::write_8bit(byte,shiftRegFast::msbfirst);
 	shiftRegFast::write_8bit(0);
 	display_enable();

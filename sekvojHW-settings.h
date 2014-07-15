@@ -42,5 +42,7 @@
 #define blinkDuty  10
 
 
+// debug Pin
+#define PIN D,3
 
 #endif /* SEKVOJHW_SETTINGS_H_ */

@@ -1,4 +1,6 @@
 
+#include <sekvojHW-settings.h>
+
 #ifndef SEKVOJHW_H_
 #define SEKVOJHW_H_
 
@@ -14,14 +16,10 @@ public:
 
 	// sets up all the pins, timers and SPI interface
 	// call this before using any other method from this class
-	void init();
+	void init(void(*buttonChangeCallback)(uint8_t number));
 
 
 	/***LEDS***/
-
-	// turn off all leds and reformat the state arrays
-	// this is automatically called duribng setup
-	//void leds_init();
 
 	// set the state of a led
 	void setLED(uint8_t number,LedState state);
@@ -32,11 +30,11 @@ public:
 
 	/***BUTTONS***/
 
-	// print the read button states to serial terminal
-	void printButtonStates();
-
 	// the the state of a button identified by its id
 	ButtonState getButtonState(uint8_t number);
+
+	// print the read button states to serial terminal
+	void printButtonStates();
 
 
 	/***RAM***/
@@ -59,8 +57,17 @@ public:
 	void display_start();
 	void display_clear();
 
+
+
+	/**TIMING**/
+
+	//uint32_t timeRunning
+
+
+
+
 	// only called by ISR routine.
-	// the would be declared private but this would prevent the ISR to access them
+	// they would be declared private but this would prevent the ISR from accessing them
 	// there are workarounds for this but as they come at a cost I just left it like this
 	void isr_updateNextLEDRow();
 	void isr_updateButtons();
@@ -76,6 +83,9 @@ private:
 	uint16_t ledStatesBeg[4];
 	uint16_t ledStatesEnd[4];
 	uint16_t buttonStates[4];
+
+
+	void (*buttonChangeCallback)(uint8_t number);
 
 	uint8_t _displayfunction;
 	uint8_t _displaycontrol;

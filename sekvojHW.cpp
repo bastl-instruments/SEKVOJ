@@ -4,7 +4,6 @@
 #include <sekvojHW-settings.h>
 
 
-
 /*** ACTUAL CODE ***/
 
 #include <Arduino.h>
@@ -44,7 +43,7 @@ static const uint8_t rowsTotal = 4; // for calculation of update frequency timer
 
 
 
-void sekvojHW::init() {
+void sekvojHW::init(void(*buttonChangeCallback)(uint8_t number)) {
 
 	cli();
 
@@ -93,6 +92,9 @@ void sekvojHW::init() {
 	SPCR &= ~_BV(SPR0);
 	SPSR |= _BV(SPI2X);  // 2X speed
 
+	// store callback pointer for changed buttons
+	 this->buttonChangeCallback = buttonChangeCallback;
+
 	// Disable Timer1 interrupt
 	//TIMSK1 &= ~_BV(TOIE1);
 
@@ -102,6 +104,7 @@ void sekvojHW::init() {
 	TCCR2B = B00000111;	  //prescaler = 1024
 	OCR2A = (F_CPU/1024)/(updateFreq*rowsTotal);
 	TCNT2  = 0;
+
 
 	// DISPLAY
 	display_start();
@@ -163,10 +166,6 @@ void sekvojHW::setLED(uint8_t number,sekvojHW::LedState state) {
 
 
 
-
-
-
-
 void sekvojHW::isr_updateNextLEDRow() {
 	static uint8_t currentRow = 0;
 	static uint8_t blinkCounter = 0;
@@ -190,16 +189,57 @@ void sekvojHW::isr_updateNextLEDRow() {
 
 void sekvojHW::isr_updateButtons() {
 
+
+
+
 	for (int8_t row=buttons_rows-1; row>=0; row--) {
+
+
 
 		shiftRegFast::write_16bit((0xFFF & ~(1<<row)));
 		shiftRegFast::enableOutput();
 
-		bitWrite(buttonStates[0],row, bit_read_in(BUTTONCOL_0));
-		bitWrite(buttonStates[1],row, bit_read_in(BUTTONCOL_1));
-		bitWrite(buttonStates[2],row, bit_read_in(BUTTONCOL_2));
-		bitWrite(buttonStates[3],row, bit_read_in(BUTTONCOL_3));
+
+
+
+		bool newButtonState;
+		uint8_t col = 0;
+
+
+		newButtonState = bit_read_in(BUTTONCOL_0);
+		if (newButtonState != bitRead(buttonStates[col],row)) {
+			bitWrite(buttonStates[col],row, newButtonState);
+			buttonChangeCallback(col*buttons_cols + row);
+		}
+		col++;
+
+
+		newButtonState = bit_read_in(BUTTONCOL_1);
+		if (newButtonState != bitRead(buttonStates[col],row)) {
+			bitWrite(buttonStates[col],row, newButtonState);
+			buttonChangeCallback(col*buttons_cols + row);
+		}
+		col++;
+
+		newButtonState = bit_read_in(BUTTONCOL_2);
+		if (newButtonState != bitRead(buttonStates[col],row)) {
+			bitWrite(buttonStates[col],row, newButtonState);
+			buttonChangeCallback(col*buttons_cols + row);
+		}
+		col++;
+
+		newButtonState = bit_read_in(BUTTONCOL_3);
+		if (newButtonState != bitRead(buttonStates[col],row)) {
+			bitWrite(buttonStates[col],row, newButtonState);
+			buttonChangeCallback(col*buttons_cols + row);
+		}
+		//col++;
+
+
 	}
+
+
+
 }
 
 
@@ -297,10 +337,10 @@ void sekvojHW::readSRAM(long address, uint8_t* buf, uint16_t len) {
 /**** INTERRUPT ****/
 
 ISR(TIMER2_COMPA_vect) {
-
+	bit_set(PIN);
 	hardware.isr_updateButtons();
 	hardware.isr_updateNextLEDRow();
-
+	bit_clear(PIN);
 }
 
 
