@@ -144,16 +144,16 @@ void sekvojHW::printLEDStates() {
 }*/
 
 
-void sekvojHW::setLED(uint8_t number,sekvojHW::LedState state) {
+void sekvojHW::setLED(uint8_t number, IHWLayer::LedState state) {
 
-	if ((state == ON) | (state==BLINK)) {
+	if ((state == IHWLayer::ON) | (state==IHWLayer::BLINK)) {
 		ledStatesBeg[number/leds_cols] &= ~(1<<(number%leds_cols));
 	} else {
 		ledStatesBeg[number/leds_cols] |= (1<<(number%leds_cols));
 
 	}
 
-	if ((state == ON) | (state==BLINK_INVERT)) {
+	if ((state == IHWLayer::ON) | (state== IHWLayer::BLINK_INVERT)) {
 		ledStatesEnd[number/leds_cols] &= ~(1<<(number%leds_cols));
 	} else {
 		ledStatesEnd[number/leds_cols] |= (1<<(number%leds_cols));
@@ -217,12 +217,12 @@ void sekvojHW::printButtonStates() {
 	}
 }
 
-sekvojHW::ButtonState sekvojHW::getButtonState(uint8_t number) {
+IHWLayer::ButtonState sekvojHW::getButtonState(uint8_t number) {
 
 	if ((buttonStates[number/buttons_rows] & (1<<(number%buttons_rows)))) {
-		return UP;
+		return IHWLayer::UP;
 	} else {
-		return DOWN;
+		return IHWLayer::DOWN;
 	}
 
 }

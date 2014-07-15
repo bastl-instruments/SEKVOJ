@@ -2,20 +2,22 @@
 #ifndef SEKVOJHW_H_
 #define SEKVOJHW_H_
 
+#include <hw/IHWLayer.h>
 
-class sekvojHW {
+class sekvojHW : public IHWLayer {
 
 
 
 public:
 
-	enum LedState{ON, OFF, BLINK, BLINK_INVERT};
-	enum ButtonState{UP, DOWN};
-
 	// sets up all the pins, timers and SPI interface
 	// call this before using any other method from this class
 	void init();
 
+	/***KNOBS***/
+
+	//Disabled function in SEKVOJ
+	virtual uint8_t getKnobValue(uint8_t index){return 0;};
 
 	/***LEDS***/
 
@@ -24,7 +26,7 @@ public:
 	//void leds_init();
 
 	// set the state of a led
-	void setLED(uint8_t number,LedState state);
+	virtual void setLED(uint8_t number, IHWLayer::LedState state);
 
 	// print the state arrays to the Serial terminal
 	void printLEDStates();
@@ -36,22 +38,22 @@ public:
 	void printButtonStates();
 
 	// the the state of a button identified by its id
-	ButtonState getButtonState(uint8_t number);
+	virtual IHWLayer::ButtonState getButtonState(uint8_t number);
 
 
 	/***RAM***/
 
 	// write a byte to the given address
-	void writeSRAM(long address, uint8_t data);
+	virtual void writeSRAM(long address, uint8_t data);
 
 	// write a number of bytes starting at the given address
-	void writeSRAM(long address, uint8_t* buf, uint16_t len);
+	virtual void writeSRAM(long address, uint8_t* buf, uint16_t len);
 
 	// read the byte stored at the given address
-	uint8_t readSRAM(long address);
+	virtual uint8_t readSRAM(long address);
 
 	// read a number of bytes starting from the given address
-	void readSRAM(long address, uint8_t* buf, uint16_t len);
+	virtual void readSRAM(long address, uint8_t* buf, uint16_t len);
 
 
 
