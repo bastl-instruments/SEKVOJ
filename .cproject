@@ -23,7 +23,7 @@
 							<option id="de.innot.avreclipse.toolchain.options.toolchain.avrdude.app.release.469219456" name="AVRDude" superClass="de.innot.avreclipse.toolchain.options.toolchain.avrdude.app.release"/>
 							<targetPlatform id="de.innot.avreclipse.targetplatform.winavr.app.release.2089559968" name="AVR Cross-Target" superClass="de.innot.avreclipse.targetplatform.winavr.app.release"/>
 							<builder buildPath="${workspace_loc:/microGranny2/Release}" id="de.innot.avreclipse.target.builder.winavr.app.release.1532093950" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="AVR GNU Make Builder" superClass="de.innot.avreclipse.target.builder.winavr.app.release"/>
-							<tool id="de.innot.avreclipse.tool.assembler.winavr.app.release.709341014" name="AVR Assembler" superClass="de.innot.avreclipse.tool.assembler.winavr.app.release">
+							<tool commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="de.innot.avreclipse.tool.assembler.winavr.app.release.709341014" name="AVR Assembler" superClass="de.innot.avreclipse.tool.assembler.winavr.app.release">
 								<option id="de.innot.avreclipse.assembler.option.debug.level.1606356592" name="Generate Debugging Info" superClass="de.innot.avreclipse.assembler.option.debug.level" value="de.innot.avreclipse.assembler.option.debug.level.none" valueType="enumerated"/>
 								<option id="de.innot.avreclipse.asm.option.include.paths.2099273701" name="#include paths for preprocessor(-I)" superClass="de.innot.avreclipse.asm.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/}&quot;"/>
@@ -43,14 +43,13 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/Ethernet}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/Ethernet/utility}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/EEPROM}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/Esplora}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/FHT}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/arduino_midi_library/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/Fat16}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/FHT_128_channel_analyser}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/pollserial}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/sdfatlib/SdFat}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/sdfatlib/SdFat/utility}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/tinyFAT}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/Tlc5940}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/TVout}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/TVoutfonts}&quot;"/>
@@ -84,14 +83,13 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/Ethernet}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/Ethernet/utility}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/EEPROM}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/Esplora}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/FHT}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/Fat16}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/arduino_midi_library/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/FHT_128_channel_analyser}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/pollserial}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/sdfatlib/SdFat}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/sdfatlib/SdFat/utility}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/tinyFAT}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/Tlc5940}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/TVout}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/TVoutfonts}&quot;"/>
@@ -133,14 +131,13 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/Ethernet}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/Ethernet/utility}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/EEPROM}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/Esplora}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/FHT}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/Fat16}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/arduino_midi_library/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/FHT_128_channel_analyser}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/pollserial}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/sdfatlib/SdFat}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/sdfatlib/SdFat/utility}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/tinyFAT}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/Tlc5940}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/TVout}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/TVoutfonts}&quot;"/>
@@ -187,6 +184,46 @@
 							<tool id="de.innot.avreclipse.tool.avrdude.app.release.2025481716" name="AVRDude" superClass="de.innot.avreclipse.tool.avrdude.app.release"/>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="de.innot.avreclipse.configuration.app.release.1402962607.583372805" name="main.cpp" rcbsApplicability="disable" resourcePath="main.cpp" toolsToInvoke="de.innot.avreclipse.tool.cppcompiler.app.release.520203984.435891982">
+						<tool id="de.innot.avreclipse.tool.cppcompiler.app.release.520203984.435891982" name="AVR C++ Compiler" superClass="de.innot.avreclipse.tool.cppcompiler.app.release.520203984">
+							<option id="de.innot.avreclipse.cppcompiler.option.incpath.2012947852" name="Include Paths (-I)" superClass="de.innot.avreclipse.cppcompiler.option.incpath" valueType="includePath">
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/core}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/Wire}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/Wire/utility}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/WiFi}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/WiFi/utility}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/Stepper}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/SPI}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/SoftwareSerial}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/Servo}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/LiquidCrystal}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/Ethernet}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/Ethernet/utility}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/EEPROM}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/FHT}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/arduino_midi_library/src}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/FHT_128_channel_analyser}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/pollserial}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/sdfatlib/SdFat}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/sdfatlib/SdFat/utility}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/tinyFAT}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/Tlc5940}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/TVout}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/TVoutfonts}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/Mozzi}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/Mozzi/config}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/Mozzi/tables}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-bastl/bastl}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-bastl/bastl/bastlSamples}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-bastl/bastl/bastlTables}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-bastl/bastlMicroGranny}&quot;"/>
+							</option>
+							<inputType id="de.innot.avreclipse.cppcompiler.input.445574261" superClass="de.innot.avreclipse.cppcompiler.input"/>
+						</tool>
+					</fileInfo>
 					<sourceEntries>
 						<entry excluding="Fat16/examples|externalRAM.cpp|AudioHacker.cpp|sekvoj|examples|testEEPROM.cpp|all.cpp|UI.cpp|test.cpp|renderAudio.cpp|midi.cpp|MEM.cpp|DRUM.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
@@ -198,19 +235,19 @@
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
 		<project id="microGranny2.de.innot.avreclipse.project.winavr.elf_2.1.0.280146290" name="AVR Cross Target Application" projectType="de.innot.avreclipse.project.winavr.elf_2.1.0"/>
 	</storageModule>
-	<storageModule moduleId="scannerConfiguration">
-		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="de.innot.avreclipse.configuration.app.release.1402962607;de.innot.avreclipse.configuration.app.release.1402962607.;de.innot.avreclipse.tool.compiler.winavr.app.release.747675109;de.innot.avreclipse.compiler.winavr.input.1877294606">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="de.innot.avreclipse.core.AVRGCCManagedMakePerProjectProfileC"/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="de.innot.avreclipse.configuration.app.release.1402962607;de.innot.avreclipse.configuration.app.release.1402962607.;de.innot.avreclipse.tool.cppcompiler.app.release.520203984;de.innot.avreclipse.cppcompiler.input.935582270">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="de.innot.avreclipse.core.AVRGCCManagedMakePerProjectProfileCPP"/>
-		</scannerConfigBuildInfo>
-	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="refreshScope" versionNumber="2">
 		<configuration configurationName="Release"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="de.innot.avreclipse.configuration.app.release.1402962607;de.innot.avreclipse.configuration.app.release.1402962607.;de.innot.avreclipse.tool.cppcompiler.app.release.520203984;de.innot.avreclipse.cppcompiler.input.935582270">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="de.innot.avreclipse.core.AVRGCCManagedMakePerProjectProfileCPP"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="de.innot.avreclipse.configuration.app.release.1402962607;de.innot.avreclipse.configuration.app.release.1402962607.;de.innot.avreclipse.tool.compiler.winavr.app.release.747675109;de.innot.avreclipse.compiler.winavr.input.1877294606">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="de.innot.avreclipse.core.AVRGCCManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
+	</storageModule>
 </cproject>
