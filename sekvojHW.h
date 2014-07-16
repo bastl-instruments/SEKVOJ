@@ -5,6 +5,7 @@
 #define SEKVOJHW_H_
 
 #include <hw/IHWLayer.h>
+#include <fifoBuffer.h>
 
 class sekvojHW : public IHWLayer {
 
@@ -75,7 +76,6 @@ public:
 	// there are workarounds for this but as they come at a cost I just left it like this
 	void isr_updateNextLEDRow();
 	void isr_updateButtons();
-
 	uint16_t bastlCycles;
 
 
@@ -84,10 +84,12 @@ private:
 	void initDisplay();
 	void latchDisplayData();
 
+	//void bufferDisplayCommand(uint8_t command);
 
-	void display_sendCommand(uint8_t command);
-	void display_sendData(uint8_t data);
-	void display_send(uint8_t byte);
+
+	void sendDisplayCommand(uint8_t command);
+	void sendDisplayData(uint8_t data);
+	void sendByteToDisplay(uint8_t byte);
 
 
 	uint16_t ledStatesBeg[4];
@@ -100,6 +102,8 @@ private:
 	uint8_t _displayfunction;
 	uint8_t _displaycontrol;
 	uint8_t _displaymode;
+
+	fifoBuffer<uint16_t,BUFFER_DEPTH> displayBuffer;
 
 
 

@@ -42,6 +42,10 @@
 #define blinkDuty  10
 
 
+//
+#define BUFFER_DEPTH 40
+
+
 // debug Pin
 #define PIN D,3
 

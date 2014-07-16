@@ -332,7 +332,7 @@ uint16_t sekvojHW::getElapsedBastlCycles() {
 }
 
 uint8_t sekvojHW::getBastlCyclesPerSecond() {
-	return F_CPU/1024/rowsTotal/OCR2A;
+	return (F_CPU/1024)/OCR2A;
 }
 
 
@@ -340,12 +340,15 @@ uint8_t sekvojHW::getBastlCyclesPerSecond() {
 
 ISR(TIMER2_COMPA_vect) {
 
+	bit_set(PIN);
+
 	hardware.bastlCycles++;
 
-	hardware.isr_updateButtons();// Duration ~1ms
+	hardware.isr_updateButtons();     // Duration ~1ms
 	hardware.isr_updateNextLEDRow();  // ~84us
 
 
+	bit_clear(PIN);
 }
 
 
