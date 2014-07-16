@@ -103,13 +103,13 @@ void sekvojHW::init(void(*buttonChangeCallback)(uint8_t number)) {
 	// TIMER 2
 	TCCR2A = (1 << WGM21);  // turn on CTC mode
 	TIMSK2 |= (1 << OCIE2A);// enable interrupt
-	TCCR2B = B00000111;	  //prescaler = 1024
+	TCCR2B = B00000111;	    //prescaler = 1024
 	OCR2A = (F_CPU/1024)/(updateFreq*rowsTotal);
 	TCNT2  = 0;
 
 
 	// DISPLAY
-	display_start();
+	initDisplay();
 	sei();
 }
 
@@ -324,14 +324,27 @@ void sekvojHW::readSRAM(long address, uint8_t* buf, uint16_t len) {
 }
 
 
+
+/**** TIMING ****/
+
+uint16_t sekvojHW::getElapsedBastlCycles() {
+	return bastlCycles;
+}
+
+uint8_t sekvojHW::getBastlCyclesPerSecond() {
+	return F_CPU/1024/rowsTotal/OCR2A;
+}
+
+
 /**** INTERRUPT ****/
 
 ISR(TIMER2_COMPA_vect) {
 
-	bit_set(PIN);
+	hardware.bastlCycles++;
+
 	hardware.isr_updateButtons();// Duration ~1ms
 	hardware.isr_updateNextLEDRow();  // ~84us
-	bit_clear(PIN);
+
 
 }
 

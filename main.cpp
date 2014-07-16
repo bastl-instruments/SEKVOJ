@@ -23,6 +23,7 @@ int main(void) {
 extern sekvojHW hardware;
 
 uint8_t lastNumber;
+uint8_t lastNumberRead;
 
 void printSerial(uint8_t number) {
 	lastNumber = number;
@@ -63,7 +64,10 @@ void loop() {
 		hardware.setLED(16,sekvojHW::OFF);
 	}
 
-	Serial.println(lastNumber,DEC);
+	if (lastNumberRead != lastNumber) {
+		lastNumberRead = lastNumber;
+		Serial.println(lastNumber,DEC);
+	}
 
 
 }

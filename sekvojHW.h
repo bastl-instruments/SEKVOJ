@@ -56,14 +56,16 @@ public:
 
 
 	/***DISPLAY***/
-	void display_start();
-	void display_clear();
+
+	void clearDisplay();
+	void setDisplayCursor(uint8_t col, uint8_t row);
 
 
 
 	/**TIMING**/
 
-	//uint32_t timeRunning
+	uint16_t getElapsedBastlCycles();
+	uint8_t  getBastlCyclesPerSecond();
 
 
 
@@ -74,13 +76,19 @@ public:
 	void isr_updateNextLEDRow();
 	void isr_updateButtons();
 
+	uint16_t bastlCycles;
+
+
 private:
+
+	void initDisplay();
+	void latchDisplayData();
 
 
 	void display_sendCommand(uint8_t command);
 	void display_sendData(uint8_t data);
 	void display_send(uint8_t byte);
-	void display_enable();
+
 
 	uint16_t ledStatesBeg[4];
 	uint16_t ledStatesEnd[4];
@@ -92,6 +100,8 @@ private:
 	uint8_t _displayfunction;
 	uint8_t _displaycontrol;
 	uint8_t _displaymode;
+
+
 
 };
 

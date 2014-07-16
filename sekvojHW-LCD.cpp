@@ -53,29 +53,29 @@
 #define RS_Pin C,2
 #define ENABLE_Pin C,3
 
+// hardware constants
+const uint8_t numLines = 2;
 
 
-void sekvojHW::display_start() {
 
-	bit_set(PIN);
+void sekvojHW::initDisplay() {
+
+
 
 	bit_dir_outp(RS_Pin);
 	bit_dir_outp(ENABLE_Pin);
 	bit_dir_outp(PIN);
 
 
-	_displayfunction = LCD_8BITMODE | LCD_1LINE | LCD_5x8DOTS;
-	_displayfunction |= LCD_2LINE;
-
-
 	delayMicroseconds(50000); // wait for display to power on
-
 
 	bit_clear(RS_Pin);        //set pins low to start commands
 	bit_clear(ENABLE_Pin);
 
 
 	// set display mode
+	_displayfunction = LCD_8BITMODE | LCD_2LINE | LCD_5x8DOTS;
+
     display_sendCommand(LCD_FUNCTIONSET | _displayfunction);
     delayMicroseconds(4500);  // wait more than 4.1ms
     display_sendCommand(LCD_FUNCTIONSET |  _displayfunction);
@@ -84,19 +84,17 @@ void sekvojHW::display_start() {
     display_sendCommand(LCD_FUNCTIONSET |  _displayfunction);
 
     _displaycontrol = LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF;
-    _displaycontrol |= LCD_DISPLAYON;
     display_sendCommand( LCD_DISPLAYCONTROL | _displaycontrol );
 
-    display_clear();
+    clearDisplay();
 
     // initialize default direction
-    _displaymode = LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT;
-    display_sendCommand(LCD_ENTRYMODESET | _displaymode);
+    display_sendCommand(LCD_ENTRYMODESET | LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT );
 
     _displaycontrol |= LCD_BLINKON;
     display_sendCommand(LCD_DISPLAYCONTROL | _displaycontrol);
 
-    bit_clear(PIN);
+
 
 
 
@@ -114,17 +112,14 @@ void sekvojHW::display_sendData(uint8_t data) {
 
 void sekvojHW::display_send(uint8_t byte) {
 
-	bit_set(PIN);
-	Serial.println(byte,HEX);
-	//Serial.println("x");
-	bit_clear(PIN);
+	shiftRegFast::write_8bit(byte,shiftRegFast::MSB_FIRST);
+	shiftRegFast::write_8bit(B11110000,shiftRegFast::MSB_FIRST);
+	shiftRegFast::enableOutput();
+	latchDisplayData();
 
-	shiftRegFast::write_8bit(byte,shiftRegFast::msbfirst);
-	shiftRegFast::write_8bit(0);
-	display_enable();
 }
 
-void sekvojHW::display_enable() {
+void sekvojHW::latchDisplayData() {
 	  bit_clear(ENABLE_Pin);
 	  delayMicroseconds(1);
 	  bit_set(ENABLE_Pin);
@@ -133,8 +128,19 @@ void sekvojHW::display_enable() {
 	  delayMicroseconds(100);   // commands need > 37us to settle
 }
 
-void sekvojHW::display_clear() {
+void sekvojHW::clearDisplay() {
 	  display_sendCommand(LCD_CLEARDISPLAY);  // clear display, set cursor position to zero
 	  delayMicroseconds(2000);  			  // this command takes a long time!
 }
+
+void sekvojHW::setDisplayCursor(uint8_t col, uint8_t row){
+
+  int row_offsets[] = { 0x00, 0x40, 0x14, 0x54 };
+  if ( row >= numLines ) {
+    row = numLines-1;    // we count rows starting w/0
+  }
+
+  display_sendCommand(LCD_SETDDRAMADDR | (col + row_offsets[row]));
+}
+
 
