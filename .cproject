@@ -46,6 +46,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/Esplora}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/FHT}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/arduino_midi_library/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/Fat16}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/FHT_128_channel_analyser}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/pollserial}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/sdfatlib/SdFat}&quot;"/>
@@ -85,6 +86,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/EEPROM}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/Esplora}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/FHT}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/Fat16}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/arduino_midi_library/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/FHT_128_channel_analyser}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/pollserial}&quot;"/>
@@ -133,6 +135,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/EEPROM}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/Esplora}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/FHT}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/Fat16}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/arduino_midi_library/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/FHT_128_channel_analyser}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs-external/pollserial}&quot;"/>
@@ -185,7 +188,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="externalRAM.cpp|AudioHacker.cpp|sekvoj|examples|testEEPROM.cpp|all.cpp|UI.cpp|test.cpp|renderAudio.cpp|midi.cpp|MEM.cpp|DRUM.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="Fat16/examples|externalRAM.cpp|AudioHacker.cpp|sekvoj|examples|testEEPROM.cpp|all.cpp|UI.cpp|test.cpp|renderAudio.cpp|midi.cpp|MEM.cpp|DRUM.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
