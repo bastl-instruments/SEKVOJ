@@ -23,6 +23,8 @@ static const uint8_t updateFreq = FREQ;
 static const uint8_t blinkCompare[2] = {blinkDuty,blinkTotal};
 
 // set by hardware
+// cols are numbers of elements that are read 'at the same time'
+// rows are multiplexed in time
 static const uint8_t leds_cols = 12;
 static const uint8_t leds_rows = 4;
 static const uint8_t buttons_cols = 4;
@@ -190,26 +192,18 @@ void sekvojHW::isr_updateNextLEDRow() {
 void sekvojHW::isr_updateButtons() {
 
 
-
-
 	for (int8_t row=buttons_rows-1; row>=0; row--) {
-
-
 
 		shiftRegFast::write_16bit((0xFFF & ~(1<<row)));
 		shiftRegFast::enableOutput();
 
-
-
-
 		bool newButtonState;
 		uint8_t col = 0;
-
 
 		newButtonState = bit_read_in(BUTTONCOL_0);
 		if (newButtonState != bitRead(buttonStates[col],row)) {
 			bitWrite(buttonStates[col],row, newButtonState);
-			buttonChangeCallback(col*buttons_cols + row);
+			buttonChangeCallback(col*buttons_rows + row);
 		}
 		col++;
 
@@ -217,28 +211,24 @@ void sekvojHW::isr_updateButtons() {
 		newButtonState = bit_read_in(BUTTONCOL_1);
 		if (newButtonState != bitRead(buttonStates[col],row)) {
 			bitWrite(buttonStates[col],row, newButtonState);
-			buttonChangeCallback(col*buttons_cols + row);
+			buttonChangeCallback(col*buttons_rows + row);
 		}
 		col++;
 
 		newButtonState = bit_read_in(BUTTONCOL_2);
 		if (newButtonState != bitRead(buttonStates[col],row)) {
 			bitWrite(buttonStates[col],row, newButtonState);
-			buttonChangeCallback(col*buttons_cols + row);
+			buttonChangeCallback(col*buttons_rows + row);
 		}
 		col++;
 
 		newButtonState = bit_read_in(BUTTONCOL_3);
 		if (newButtonState != bitRead(buttonStates[col],row)) {
 			bitWrite(buttonStates[col],row, newButtonState);
-			buttonChangeCallback(col*buttons_cols + row);
+			buttonChangeCallback(col*buttons_rows + row);
 		}
 		//col++;
-
-
 	}
-
-
 
 }
 
@@ -337,10 +327,12 @@ void sekvojHW::readSRAM(long address, uint8_t* buf, uint16_t len) {
 /**** INTERRUPT ****/
 
 ISR(TIMER2_COMPA_vect) {
+
 	bit_set(PIN);
-	hardware.isr_updateButtons();
-	hardware.isr_updateNextLEDRow();
+	hardware.isr_updateButtons();// Duration ~1ms
+	hardware.isr_updateNextLEDRow();  // ~84us
 	bit_clear(PIN);
+
 }
 
 
