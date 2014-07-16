@@ -9,6 +9,7 @@
 #include <Arduino.h>
 #include <sekvojHW.h>
 #include <shiftRegisterFast.h>
+#include <portManipulations.h>
 
 
 // commands
@@ -61,7 +62,10 @@ const uint8_t numLines = 2;
 void sekvojHW::initDisplay() {
 
 
+	//// Interrupt is not running yet and therefore reading the display will not work
+	//// --> use of sendDisplayCommandDirect to bypass buffer
 
+	// set pins as output
 	bit_dir_outp(RS_Pin);
 	bit_dir_outp(ENABLE_Pin);
 	bit_dir_outp(PIN);
@@ -76,61 +80,73 @@ void sekvojHW::initDisplay() {
 	// set display mode
 	_displayfunction = LCD_8BITMODE | LCD_2LINE | LCD_5x8DOTS;
 
-	sendDisplayCommand(LCD_FUNCTIONSET | _displayfunction);
+	sendDisplayDirect(COMMAND, LCD_FUNCTIONSET | _displayfunction);
     delayMicroseconds(4500);  // wait more than 4.1ms
-    sendDisplayCommand(LCD_FUNCTIONSET |  _displayfunction);
+    sendDisplayDirect(COMMAND, LCD_FUNCTIONSET |  _displayfunction);
     delayMicroseconds(150);
-    sendDisplayCommand(LCD_FUNCTIONSET |  _displayfunction);
-    sendDisplayCommand(LCD_FUNCTIONSET |  _displayfunction);
+    sendDisplayDirect(COMMAND, LCD_FUNCTIONSET |  _displayfunction);
+    sendDisplayDirect(COMMAND, LCD_FUNCTIONSET |  _displayfunction);
 
     _displaycontrol = LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF;
-    sendDisplayCommand( LCD_DISPLAYCONTROL | _displaycontrol );
+    sendDisplayDirect(COMMAND, LCD_DISPLAYCONTROL | _displaycontrol);
 
-    clearDisplay();
+	sendDisplayDirect(COMMAND, LCD_CLEARDISPLAY);  // clear display, set cursor position to zero
+	delayMicroseconds(2000);  			  // this command takes a long time!
 
     // initialize default direction
-    sendDisplayCommand(LCD_ENTRYMODESET | LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT );
+    sendDisplayDirect(COMMAND, LCD_ENTRYMODESET | LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT);
 
     _displaycontrol |= LCD_BLINKON;
-    sendDisplayCommand(LCD_DISPLAYCONTROL | _displaycontrol);
-
-
+    sendDisplayDirect(COMMAND, LCD_DISPLAYCONTROL | _displaycontrol);
 
 
 }
 
-void sekvojHW::sendDisplayCommand(uint8_t command) {
-	bit_clear(RS_Pin);
-	sendByteToDisplay(command);
+void sekvojHW::sendDisplayDirect(DisplayDataType dataType, uint8_t byte) {
+	if (dataType == COMMAND) bit_clear(RS_Pin);
+	else                     bit_set(RS_Pin);
+
+	sendByteToDisplay(byte);
 }
 
-void sekvojHW::sendDisplayData(uint8_t data) {
-	bit_set(RS_Pin);
-	sendByteToDisplay(data);
+void sekvojHW::sendDisplay(DisplayDataType dataType, uint8_t byte) {
+	if (dataType == COMMAND) bit_clear(RS_Pin);
+	else                     bit_set(RS_Pin);
+
+	while (isDisplayBufferLoaded); //wait until buffer is free
+	displayBuffer = byte;
+	isDisplayBufferLoaded = true;
 }
+
+
+void sekvojHW::isr_sendDisplayBuffer() {
+	if (isDisplayBufferLoaded) {
+		sendByteToDisplay(displayBuffer);
+		isDisplayBufferLoaded = false;
+	}
+}
+
+
 
 void sekvojHW::sendByteToDisplay(uint8_t byte) {
 
+	// switch off all the led rows and write the byte to display and latch it in
 	shiftRegFast::write_8bit(byte,shiftRegFast::MSB_FIRST);
 	shiftRegFast::write_8bit(B11110000,shiftRegFast::MSB_FIRST);
 	shiftRegFast::enableOutput();
-	latchDisplayData();
 
-}
-
-void sekvojHW::latchDisplayData() {
 	bit_clear(ENABLE_Pin);
 	delayMicroseconds(1);
 	bit_set(ENABLE_Pin);
 	delayMicroseconds(1);    // enable pulse must be >450ns
 	bit_clear(ENABLE_Pin);
 	delayMicroseconds(100);   // commands need > 37us to settle
+
 }
 
-void sekvojHW::clearDisplay() {
-	sendDisplayCommand(LCD_CLEARDISPLAY);  // clear display, set cursor position to zero
-	delayMicroseconds(2000);  			  // this command takes a long time!
-}
+
+
+
 
 void sekvojHW::setDisplayCursor(uint8_t col, uint8_t row){
 
@@ -139,7 +155,8 @@ void sekvojHW::setDisplayCursor(uint8_t col, uint8_t row){
     row = numLines-1;    // we count rows starting w/0
   }
 
-  sendDisplayCommand(LCD_SETDDRAMADDR | (col + row_offsets[row]));
+  sendDisplay(COMMAND, LCD_SETDDRAMADDR | (col + row_offsets[row]));
 }
+
 
 

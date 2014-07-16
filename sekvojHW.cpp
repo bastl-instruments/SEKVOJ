@@ -342,7 +342,9 @@ ISR(TIMER2_COMPA_vect) {
 
 	bit_set(PIN);
 
-	hardware.bastlCycles++;
+	hardware.incrementBastlCycles();
+
+	hardware.isr_sendDisplayBuffer();
 
 	hardware.isr_updateButtons();     // Duration ~1ms
 	hardware.isr_updateNextLEDRow();  // ~84us

@@ -5,11 +5,11 @@
 #define SEKVOJHW_H_
 
 #include <hw/IHWLayer.h>
-#include <fifoBuffer.h>
+
 
 class sekvojHW : public IHWLayer {
 
-
+enum DisplayDataType {COMMAND,DATA};
 
 public:
 
@@ -58,7 +58,7 @@ public:
 
 	/***DISPLAY***/
 
-	void clearDisplay();
+	//void clearDisplay();
 	void setDisplayCursor(uint8_t col, uint8_t row);
 
 
@@ -76,34 +76,46 @@ public:
 	// there are workarounds for this but as they come at a cost I just left it like this
 	void isr_updateNextLEDRow();
 	void isr_updateButtons();
-	uint16_t bastlCycles;
+	void isr_sendDisplayBuffer();
+	inline void incrementBastlCycles() {bastlCycles++;}
 
 
 private:
+	/**TIMING**/
+	uint16_t bastlCycles;
 
-	void initDisplay();
-	void latchDisplayData();
-
-	//void bufferDisplayCommand(uint8_t command);
-
-
-	void sendDisplayCommand(uint8_t command);
-	void sendDisplayData(uint8_t data);
-	void sendByteToDisplay(uint8_t byte);
-
-
+	/**LEDS**/
 	uint16_t ledStatesBeg[4];
 	uint16_t ledStatesEnd[4];
+
+	/**BUTTONS**/
 	uint16_t buttonStates[4];
-
-
 	void (*buttonChangeCallback)(uint8_t number);
+
+	/**DISPLAY**/
+
+	// Sets up used pins and directly sends commands to set basic display mode
+	// automatically called during sekvojHW::setup()
+	void initDisplay();
+
+	// Send a command or data byte directly (bypassing the display buffer) to the display
+	// this needs to be used as long as the buffer is not read because the interrupt is not running
+	void sendDisplayDirect(DisplayDataType dataType, uint8_t byte);
+
+	// send a command or data byte to the display buffer
+	// it will be read during the next interrupt
+	void sendDisplay(DisplayDataType dataType, uint8_t byte);
+
+	// writes a given byte to the display
+	void sendByteToDisplay(uint8_t byte);
+
+	uint8_t displayBuffer;
+	bool    isDisplayBufferLoaded;
 
 	uint8_t _displayfunction;
 	uint8_t _displaycontrol;
 	uint8_t _displaymode;
 
-	fifoBuffer<uint16_t,BUFFER_DEPTH> displayBuffer;
 
 
 
