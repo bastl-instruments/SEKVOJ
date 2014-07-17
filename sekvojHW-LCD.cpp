@@ -110,14 +110,16 @@ void sekvojHW::sendDisplayDirect(DisplayDataType dataType, uint8_t byte) {
 }
 
 void sekvojHW::sendDisplay(DisplayDataType dataType, uint8_t byte) {
-	if (dataType == COMMAND) bit_clear(RS_Pin);
-	else                     bit_set(RS_Pin);
-
 
 	while (isDisplayBufferLoaded); //wait until buffer is free
-
 	displayBuffer = byte;
+
+	if (dataType == COMMAND) bit_clear(RS_Pin);
+		else                     bit_set(RS_Pin);
+
 	isDisplayBufferLoaded = true;
+
+
 }
 
 
@@ -173,8 +175,8 @@ void sekvojHW::operator <<(const char text[]) {
 	writeDisplayText(text);
 }
 
-void sekvojHW::operator <<(char data) {
-	sendDisplay(DATA,(uint8_t)data);
+void sekvojHW::operator <<(uint8_t data) {
+	sendDisplay(DATA,data);
 }
 
 

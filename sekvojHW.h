@@ -61,9 +61,10 @@ public:
 	void clearDisplay();
 	void setDisplayCursor(uint8_t col, uint8_t row);
 
+	// write a string to display
 	void writeDisplayText(const char text[]);
 	void operator <<(const char text[]);
-	void operator <<(char data);
+	void operator <<(uint8_t data);
 
 
 
