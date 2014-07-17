@@ -58,19 +58,37 @@ public:
 
 	/***DISPLAY***/
 
+	// deletes all text on the display
 	void clearDisplay();
+
+	// sets the cursor to a given positon
+	// after this, you can start writing text from that position
 	void setDisplayCursor(uint8_t col, uint8_t row);
 
 	// write a string to display
+	// you can write an infitinte number of characters but only some of them are being dislayed at a time
+	// this display can show two lines of 16 characters
 	void writeDisplayText(const char text[]);
+
+	// convenient operator to write strings to display
 	void operator <<(const char text[]);
+
+	// this operator lets you display special characters by their id
+	// you can find the ids in the data sheet of HD44780 on page 17 (or 18 depending on the model you are using)
 	void operator <<(uint8_t data);
 
 
 
 	/**TIMING**/
 
+	// the number of bastl cycles elapsed since startup
+	// this number will overflow after some minutes; you have to deal with that in the layer above
+	// using a longer datatype would prevent this but at the cost of longer computation time
 	uint16_t getElapsedBastlCycles();
+
+	// returns the relation between bastl cycles and seconds
+	// this value is dependent on the hardware update frequency that you can set by a define
+	// use this to map real time processes (like BMP) to bastlCycles
 	uint8_t  getBastlCyclesPerSecond();
 
 
