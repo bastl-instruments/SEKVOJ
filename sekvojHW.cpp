@@ -340,17 +340,15 @@ uint8_t sekvojHW::getBastlCyclesPerSecond() {
 
 ISR(TIMER2_COMPA_vect) {
 
-	bit_set(PIN);
 
+	//bit_set(PIN);
 	hardware.incrementBastlCycles();
+	hardware.isr_sendDisplayBuffer();  // ~156us
+	hardware.isr_updateButtons();      // ~1ms
+	hardware.isr_updateNextLEDRow();   // ~84us
+	//bit_clear(PIN);
 
-	hardware.isr_sendDisplayBuffer();
 
-	hardware.isr_updateButtons();     // Duration ~1ms
-	hardware.isr_updateNextLEDRow();  // ~84us
-
-
-	bit_clear(PIN);
 }
 
 

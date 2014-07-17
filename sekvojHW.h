@@ -58,8 +58,12 @@ public:
 
 	/***DISPLAY***/
 
-	//void clearDisplay();
+	void clearDisplay();
 	void setDisplayCursor(uint8_t col, uint8_t row);
+
+	void writeDisplayText(const char text[]);
+	void operator <<(const char text[]);
+	void operator <<(char data);
 
 
 
@@ -109,8 +113,8 @@ private:
 	// writes a given byte to the display
 	void sendByteToDisplay(uint8_t byte);
 
-	uint8_t displayBuffer;
-	bool    isDisplayBufferLoaded;
+	volatile uint8_t displayBuffer;
+	volatile bool    isDisplayBufferLoaded;
 
 	uint8_t _displayfunction;
 	uint8_t _displaycontrol;

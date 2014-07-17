@@ -113,7 +113,9 @@ void sekvojHW::sendDisplay(DisplayDataType dataType, uint8_t byte) {
 	if (dataType == COMMAND) bit_clear(RS_Pin);
 	else                     bit_set(RS_Pin);
 
+
 	while (isDisplayBufferLoaded); //wait until buffer is free
+
 	displayBuffer = byte;
 	isDisplayBufferLoaded = true;
 }
@@ -158,5 +160,25 @@ void sekvojHW::setDisplayCursor(uint8_t col, uint8_t row){
   sendDisplay(COMMAND, LCD_SETDDRAMADDR | (col + row_offsets[row]));
 }
 
+void sekvojHW::writeDisplayText(const char text[]) {
 
+	while (*text != 0) {
+		sendDisplay(DATA,(uint8_t)(*text));
+		text++;
+	}
+
+}
+
+void sekvojHW::operator <<(const char text[]) {
+	writeDisplayText(text);
+}
+
+void sekvojHW::operator <<(char data) {
+	sendDisplay(DATA,(uint8_t)data);
+}
+
+
+void sekvojHW::clearDisplay() {
+	sendDisplay(COMMAND,LCD_CLEARDISPLAY);
+}
 
