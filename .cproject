@@ -30,6 +30,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/core}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/libs-external/}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/Wire}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/Wire/utility}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-base/libs/WiFi}&quot;"/>
