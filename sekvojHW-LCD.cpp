@@ -186,9 +186,10 @@ void sekvojHW::clearDisplay() {
 
 void sekvojHW::writeDisplayNumber(uint8_t n) {
 
-	char string[4] = {0,0,0,0};
+	const uint8_t numbDigits = 3;
+	char string[numbDigits+1] = {0,0,0,0};
 
-	uint8_t  i = 3;
+	uint8_t  i = numbDigits;
 
 	do	{ 								/* generate digits in reverse order */
 		string[i--] = n % 10 + '0'; 	/* get next digit */
