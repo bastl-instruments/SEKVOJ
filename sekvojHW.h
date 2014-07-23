@@ -68,10 +68,12 @@ public:
 	// write a string to display
 	// you can write an infitinte number of characters but only some of them are being dislayed at a time
 	// this display can show two lines of 16 characters
-	void writeDisplayText(const char text[]);
+	void writeDisplayText(char text[]);
+
+	void writeDisplayNumber(uint8_t n);
 
 	// convenient operator to write strings to display
-	void operator <<(const char text[]);
+	void operator <<(char text[]);
 
 	// this operator lets you display special characters by their id
 	// you can find the ids in the data sheet of HD44780 on page 17 (or 18 depending on the model you are using)
