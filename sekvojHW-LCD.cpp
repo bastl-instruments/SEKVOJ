@@ -187,7 +187,7 @@ void sekvojHW::clearDisplay() {
 void sekvojHW::writeDisplayNumber(uint8_t n) {
 
 	const uint8_t numbDigits = 3;
-	char string[numbDigits+1] = {0,0,0,0};
+	char string[numbDigits+1] = {'0','0','0',0};
 
 	uint8_t  i = numbDigits;
 
