@@ -331,7 +331,7 @@ uint16_t sekvojHW::getElapsedBastlCycles() {
 	return bastlCycles;
 }
 
-uint8_t sekvojHW::getBastlCyclesPerSecond() {
+uint16_t sekvojHW::getBastlCyclesPerSecond() {
 	return (F_CPU/1024)/OCR2A;
 }
 

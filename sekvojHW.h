@@ -89,7 +89,7 @@ public:
 	// returns the relation between bastl cycles and seconds
 	// this value is dependent on the hardware update frequency that you can set by a define
 	// use this to map real time processes (like BMP) to bastlCycles
-	uint8_t  getBastlCyclesPerSecond();
+	uint16_t  getBastlCyclesPerSecond();
 
 
 
