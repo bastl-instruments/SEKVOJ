@@ -110,14 +110,16 @@ void sekvojHW::sendDisplayDirect(DisplayDataType dataType, uint8_t byte) {
 }
 
 void sekvojHW::sendDisplay(DisplayDataType dataType, uint8_t byte) {
-	if (dataType == COMMAND) bit_clear(RS_Pin);
-	else                     bit_set(RS_Pin);
-
 
 	while (isDisplayBufferLoaded); //wait until buffer is free
-
 	displayBuffer = byte;
+
+	if (dataType == COMMAND) bit_clear(RS_Pin);
+		else                     bit_set(RS_Pin);
+
 	isDisplayBufferLoaded = true;
+
+
 }
 
 
@@ -160,7 +162,7 @@ void sekvojHW::setDisplayCursor(uint8_t col, uint8_t row){
   sendDisplay(COMMAND, LCD_SETDDRAMADDR | (col + row_offsets[row]));
 }
 
-void sekvojHW::writeDisplayText(const char text[]) {
+void sekvojHW::writeDisplayText(char text[]) {
 
 	while (*text != 0) {
 		sendDisplay(DATA,(uint8_t)(*text));
@@ -169,12 +171,12 @@ void sekvojHW::writeDisplayText(const char text[]) {
 
 }
 
-void sekvojHW::operator <<(const char text[]) {
+void sekvojHW::operator <<(char text[]) {
 	writeDisplayText(text);
 }
 
-void sekvojHW::operator <<(char data) {
-	sendDisplay(DATA,(uint8_t)data);
+void sekvojHW::operator <<(uint8_t data) {
+	sendDisplay(DATA,data);
 }
 
 
@@ -182,3 +184,16 @@ void sekvojHW::clearDisplay() {
 	sendDisplay(COMMAND,LCD_CLEARDISPLAY);
 }
 
+void sekvojHW::writeDisplayNumber(uint8_t n) {
+
+	char string[4] = {0,0,0,0};
+
+	uint8_t  i = 0;
+
+	do	{ 								/* generate digits in reverse order */
+		string[i++] = n % 10 + '0'; 	/* get next digit */
+	} while ((n /= 10) > 0) ; 			/* delete it */
+
+	writeDisplayText(string);
+
+}
