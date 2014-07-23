@@ -188,7 +188,7 @@ void sekvojHW::writeDisplayNumber(uint8_t n) {
 
 	char string[4] = {0,0,0,0};
 
-	uint8_t  i = strlen(string)-1;
+	uint8_t  i = 3;
 
 	do	{ 								/* generate digits in reverse order */
 		string[i--] = n % 10 + '0'; 	/* get next digit */
