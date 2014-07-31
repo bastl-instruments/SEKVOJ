@@ -28,7 +28,7 @@ private:
 	IHWLayer * hw_;
 	unsigned int currentStatus_;
 	unsigned int lastStatus_;
-	Switches * stepSwitches_;
+	Switches stepSwitches_;
 	unsigned char stepButtonIndexes_[16];
 	char currentDownButton_;
 	bool ignoreOffs_;

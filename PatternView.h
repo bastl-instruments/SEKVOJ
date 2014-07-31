@@ -27,8 +27,8 @@ private:
 	IStepMemory * memory_;
 
 	//Controls
-	Switches * instrumentTopSwitches_;
-	Switches * instrumentBottomSwitches_;
+	Switches instrumentTopSwitches_;
+	Switches instrumentBottomSwitches_;
 	RadioButtons * patternSelectRadioButtons_;
 
 	unsigned char instrumentSwitches_[10];

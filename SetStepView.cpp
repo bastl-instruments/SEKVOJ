@@ -19,7 +19,6 @@ SetStepView::SetStepView() : hw_(0),
 								 panButtons_(0),
 								 instrumentButtons_(0),
 								 velocityRadio_(0),
-								 subStepSwitches_(0),
 								 drumStepView_(0),
 								 instrumentButtonIndexes_{31, 30, 29, 28, 27, 26, 25, 24, 32, 33},
 								 panButtonIndexes_{15, 14, 13, 12},
@@ -33,7 +32,6 @@ SetStepView::~SetStepView() {
 	delete instrumentButtons_;
 	delete velocityRadio_;
 	delete drumStepView_;
-	delete subStepSwitches_;
 }
 
 void SetStepView::init(IHWLayer * hw, IStepMemory * memory, Player * player, unsigned char pattern) {
@@ -42,7 +40,7 @@ void SetStepView::init(IHWLayer * hw, IStepMemory * memory, Player * player, uns
 	player_ = player;
 	currentPattern_ = pattern;
 	panButtons_ = new RadioButtons(hw, panButtonIndexes_, 4);
-	subStepSwitches_ = new Switches(hw, panButtonIndexes_, 4);
+	subStepSwitches_.init(hw, panButtonIndexes_, 4);
 	instrumentButtons_ = new RadioButtons(hw, instrumentButtonIndexes_, 10);
 	velocityRadio_ = new RadioButtons(hw_, velocitySettingsIndexes_, 2);
 	drumStepView_ = new DrumStepsView();
@@ -114,13 +112,13 @@ void SetStepView::update() {
 				bool substepHasNote = step.getSubStep(i) != DrumStep::OFF;
 				anyOn = anyOn || substepHasNote;
 				hw_->setLED(panButtonIndexes_[i], substepHasNote ? IHWLayer::ON : IHWLayer::OFF);
-				subStepSwitches_->setStatus(i, substepHasNote);
+				subStepSwitches_.setStatus(i, substepHasNote);
 			}
 			if (!anyOn) {
 				step.setSubStep(0, currentVelocity_);
 				memory_->setDrumStep(currentInstrumentIndex_, currentPattern_, (currentPanIndex_ * 16) + currentButtonDown, step);
 				hw_->setLED(panButtonIndexes_[0], IHWLayer::ON);
-				subStepSwitches_->setStatus(0, true);
+				subStepSwitches_.setStatus(0, true);
 			}
 		} else {
 			inSubStepMode_ = false;
@@ -130,11 +128,11 @@ void SetStepView::update() {
 		}
 	}
 	if (inSubStepMode_) {
-		subStepSwitches_->update();
+		subStepSwitches_.update();
 		DrumStep step = memory_->getDrumStep(currentInstrumentIndex_, currentPattern_, (currentPanIndex_ * 16) + currentButtonDown);
 		for (unsigned char i = 0; i < 4; i++) {
 			bool substepHasNote = step.getSubStep(i) != DrumStep::OFF;
-			if (substepHasNote != subStepSwitches_->getStatus(i)) {
+			if (substepHasNote != subStepSwitches_.getStatus(i)) {
 				drumStepView_->setIgnoreOffs(true);
 				step.setSubStep(i, substepHasNote ? DrumStep::OFF : currentVelocity_);
 				hw_->setLED(panButtonIndexes_[i], !substepHasNote ? IHWLayer::ON : IHWLayer::OFF);

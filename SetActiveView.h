@@ -34,8 +34,8 @@ private:
 
 	RadioButtons * panButtons_;
 	RadioButtons * instrumentButtons_;
-	Switches * topSwitches_;
-	Switches * bottomSwitches_;
+	Switches topSwitches_;
+	Switches bottomSwitches_;
 
 	unsigned char instrumentButtonIndexes_[10] ;
 	unsigned char stepButtonIndexes_[16] ;

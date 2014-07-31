@@ -40,7 +40,7 @@ private:
 	RadioButtons * panButtons_;
 	RadioButtons * instrumentButtons_;
 	RadioButtons * velocityRadio_;
-	Switches * subStepSwitches_;
+	Switches subStepSwitches_;
 	DrumStepsView * drumStepView_;
 
 	unsigned char instrumentButtonIndexes_[10] ;
