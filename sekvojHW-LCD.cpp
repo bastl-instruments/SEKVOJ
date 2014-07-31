@@ -96,8 +96,10 @@ void sekvojHW::initDisplay() {
     // initialize default direction
     sendDisplayDirect(COMMAND, LCD_ENTRYMODESET | LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT);
 
-    _displaycontrol |= LCD_BLINKON;
-    sendDisplayDirect(COMMAND, LCD_DISPLAYCONTROL | _displaycontrol);
+    //_displaycontrol |= LCD_BLINKON;
+    //sendDisplayDirect(COMMAND, LCD_DISPLAYCONTROL | _displaycontrol);
+
+    sendDisplayDirect(COMMAND,LCD_CLEARDISPLAY);
 
 
 }
@@ -186,15 +188,23 @@ void sekvojHW::clearDisplay() {
 
 void sekvojHW::writeDisplayNumber(uint8_t n) {
 
-	const uint8_t numbDigits = 3;
-	char string[numbDigits+1] = {'0','0','0',0};
+	const uint8_t maxDigits = 3;
+	uint8_t lastValidIndex = 0;
+	char tmp[maxDigits];
 
-	uint8_t  i = numbDigits+1;
 
 	do	{ 								/* generate digits in reverse order */
-		string[i--] = n % 10 + '0'; 	/* get next digit */
+		tmp[lastValidIndex] = (n % 10 + '0'); 	/* get next digit */
+		lastValidIndex++;
 	} while ((n /= 10) > 0) ; 			/* delete it */
 
-	writeDisplayText(string);
+	char output [maxDigits+1];
+	uint8_t outputIndex = 0;
+	for (int8_t index = lastValidIndex-1; index>=0; index--) {
+		output[outputIndex] = tmp[index];
+		outputIndex++;
+	}
+	output[outputIndex] = 0;
 
+	writeDisplayText(output);
 }
