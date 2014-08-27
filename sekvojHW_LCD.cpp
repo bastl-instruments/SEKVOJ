@@ -1,13 +1,13 @@
 /*** PERMANENT SETTINGS***/
 
-#include <sekvojHW-settings.h>
+#include "sekvojHW_settings.h"
 
 
 /*** ACTUAL CODE ***/
 
 
 #include <Arduino.h>
-#include <sekvojHW.h>
+#include "sekvojHW.h"
 #include <shiftRegisterFast.h>
 #include <portManipulations.h>
 

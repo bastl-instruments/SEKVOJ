@@ -1,3 +1,4 @@
+
 /*
  * SetActiveView.h
  *
@@ -8,23 +9,28 @@
 #ifndef SETACTIVEVIEW_H_
 #define SETACTIVEVIEW_H_
 
-#include <controls/IView.h>
-#include <hw/IHWLayer.h>
-#include <data/IStepMemory.h>
-#include <controls/RadioButtons.h>
-#include <controls/Switches.h>
+#include <IView.h>
+#include <IHWLayer.h>
+#include <IStepMemory.h>
+#include <RadioButtons.h>
+#include <Switches.h>
+#include <BastlMetronome.h>
+#include <Player.h>
 
 class SetActiveView : public IView {
 public:
 	SetActiveView();
 	~SetActiveView();
-	void init(IHWLayer * hw, IStepMemory * memory, unsigned char pattern);
+	void init(IHWLayer * hw, IStepMemory * memory, Player * player, BastlMetronome * stepper_, unsigned char pattern);
 	void update();
 	void updateActives();
 	void updateConfiguration();
 private:
 	IHWLayer * hw_;
 	IStepMemory * memory_;
+	Player * player_;
+	BastlMetronome * stepper_;
+
 
 	unsigned char currentPattern_;
 	unsigned char currentPanIndex_;
@@ -34,8 +40,6 @@ private:
 
 	RadioButtons * panButtons_;
 	RadioButtons * instrumentButtons_;
-	Switches topSwitches_;
-	Switches bottomSwitches_;
 
 	unsigned char instrumentButtonIndexes_[10] ;
 	unsigned char stepButtonIndexes_[16] ;

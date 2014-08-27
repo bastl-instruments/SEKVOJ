@@ -8,25 +8,28 @@
 #ifndef MAINMENUVIEW_H_
 #define MAINMENUVIEW_H_
 
-#include <controls/IView.h>
-#include <hw/IHWLayer.h>
-#include <players/Player.h>
-#include <data/IStepMemory.h>
-#include <controls/RadioButtons.h>
-#include <players/PlayerSettings.h>
+#include <IView.h>
+#include <IHWLayer.h>
+#include <Player.h>
+#include <IStepMemory.h>
+#include <RadioButtons.h>
+#include <PlayerSettings.h>
+#include <BastlMetronome.h>
 
 class MainMenuView : public IView {
 public:
 	MainMenuView();
 	~MainMenuView();
-	void init(IHWLayer * hw, Player * player, IStepMemory * memory, PlayerSettings * settings);
+	void init(IHWLayer * hw, Player * player, BastlMetronome * stepper, IStepMemory * memory, PlayerSettings * settings, IMIDICommandProcessor * midiProcessor);
 	void update();
 private:
 
 	IHWLayer * hw_;
 	Player * player_;
+	BastlMetronome * stepper_;
 	IStepMemory * memory_;
 	PlayerSettings * settings_;
+	IMIDICommandProcessor * midiProcessor_;
 
 	IView * currentView_;
 	unsigned char currentViewIndex_;

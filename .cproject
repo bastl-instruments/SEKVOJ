@@ -104,6 +104,7 @@
 								</option>
 								<option id="de.innot.avreclipse.compiler.option.def.1906350293" name="Define Syms (-D)" superClass="de.innot.avreclipse.compiler.option.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="ARDUINO=100"/>
+									<listOptionValue builtIn="false" value="EXTERNAL_IDE=1"/>
 								</option>
 								<option id="de.innot.avreclipse.compiler.option.optimize.other.1220082160" name="Other Optimization Flags" superClass="de.innot.avreclipse.compiler.option.optimize.other" value="" valueType="string"/>
 								<option id="de.innot.avreclipse.compiler.option.optimize.packstruct.1590615560" name="Pack structs (-fpack-struct)" superClass="de.innot.avreclipse.compiler.option.optimize.packstruct" value="false" valueType="boolean"/>
@@ -152,12 +153,14 @@
 								</option>
 								<option id="de.innot.avreclipse.cppcompiler.option.def.1647150910" name="Define Syms (-D)" superClass="de.innot.avreclipse.cppcompiler.option.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="ARDUINO=100"/>
+									<listOptionValue builtIn="false" value="EXTERNAL_IDE=1"/>
 								</option>
-								<option id="de.innot.avreclipse.cppcompiler.option.otherflags.1879961797" name="Other flags" superClass="de.innot.avreclipse.cppcompiler.option.otherflags" value="" valueType="string"/>
+								<option id="de.innot.avreclipse.cppcompiler.option.otherflags.1879961797" name="Other flags" superClass="de.innot.avreclipse.cppcompiler.option.otherflags" value="-x c++" valueType="string"/>
 								<option id="de.innot.avreclipse.cppcompiler.option.optimize.packstruct.1673984776" name="Pack structs (-fpack-struct)" superClass="de.innot.avreclipse.cppcompiler.option.optimize.packstruct" value="false" valueType="boolean"/>
 								<option id="de.innot.avreclipse.cppcompiler.option.optimize.shortenums.526414721" name="Short enums (-fshort-enums)" superClass="de.innot.avreclipse.cppcompiler.option.optimize.shortenums" value="false" valueType="boolean"/>
 								<option id="de.innot.avreclipse.cppcompiler.option.language.uchar.2011811509" name="char is unsigned (-funsigned-char)" superClass="de.innot.avreclipse.cppcompiler.option.language.uchar" value="false" valueType="boolean"/>
 								<option id="de.innot.avreclipse.cppcompiler.option.language.ubitfields.2080773867" name="bitfields are unsigned (-funsigned-bitfields)" superClass="de.innot.avreclipse.cppcompiler.option.language.ubitfields" value="false" valueType="boolean"/>
+								<option id="de.innot.avreclipse.cppcompiler.option.verbose.821958305" name="Verbose (-v)" superClass="de.innot.avreclipse.cppcompiler.option.verbose" value="false" valueType="boolean"/>
 								<inputType id="de.innot.avreclipse.cppcompiler.input.935582270" superClass="de.innot.avreclipse.cppcompiler.input"/>
 							</tool>
 							<tool id="de.innot.avreclipse.tool.linker.winavr.app.release.193010770" name="AVR C Linker" superClass="de.innot.avreclipse.tool.linker.winavr.app.release"/>
@@ -186,7 +189,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="main.cpp|main-SD.cpp|Release_old|test.cpp|UI.cpp|MEM.cpp|examples|midi.cpp|renderAudio.cpp|externalRAM.cpp|AudioHacker.cpp|all.cpp|Fat16/examples|sekvoj|DRUM.cpp|testEEPROM.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="main-SD.cpp|Release_old|test.cpp|UI.cpp|MEM.cpp|examples|midi.cpp|renderAudio.cpp|externalRAM.cpp|AudioHacker.cpp|all.cpp|Fat16/examples|sekvoj|DRUM.cpp|testEEPROM.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

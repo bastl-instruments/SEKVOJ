@@ -1,10 +1,11 @@
 
-#include <sekvojHW-settings.h>
+#include "sekvojHW_settings.h"
 
 #ifndef SEKVOJHW_H_
 #define SEKVOJHW_H_
 
-#include <hw/IHWLayer.h>
+#include <IHWLayer.h>
+#include <Arduino.h>
 
 
 class sekvojHW : public IHWLayer {

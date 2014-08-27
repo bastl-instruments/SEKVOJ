@@ -8,9 +8,9 @@
 #ifndef DRUMSTEPSVIEW_H_
 #define DRUMSTEPSVIEW_H_
 
-#include <controls/IView.h>
-#include <hw/IHWLayer.h>
-#include <controls/Switches.h>
+#include <IView.h>
+#include <IHWLayer.h>
+#include <Switches.h>
 
 class DrumStepsView : public IView {
 public:
@@ -22,7 +22,7 @@ public:
 	bool getDownButton(unsigned char & button);
 	unsigned int getNewOffs();
 	unsigned int getNewOns();
-	void setInvertedButton(char index);
+	void setInvertedButton(unsigned char index);
 	void setIgnoreOffs(bool ignoreOffs);
 private:
 	IHWLayer * hw_;

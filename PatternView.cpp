@@ -5,15 +5,44 @@
  *      Author: bastl
  */
 
-#include <PatternView.h>
-#include <data/InstrumentDefinitions.h>
+#include "PatternView.h"
+#include <InstrumentDefinitions.h>
 
 PatternView::PatternView() : hw_(0), settings_(0), memory_(0),
 							 patternSelectRadioButtons_(0),
-							 instrumentSwitches_{31, 30, 29, 28, 27, 26, 25, 24, 32, 33},
-							 patternSelectButtons_{43, 42, 41, 40, 39, 38, 37, 36, 44, 45, 46, 47, 20, 21, 22, 23},
-							 currentInstrumentStatuses_{0, 0, 0},
 							 currentPattern_(0) {
+  currentInstrumentStatuses_[0] = 0;
+  currentInstrumentStatuses_[1] = 0;
+  currentInstrumentStatuses_[2] = 0;
+  patternSelectButtons_[0] = 43;
+  patternSelectButtons_[1] = 42;
+  patternSelectButtons_[2] = 41;
+  patternSelectButtons_[3] = 40;
+  patternSelectButtons_[4] = 39;
+  patternSelectButtons_[5] = 38;
+  patternSelectButtons_[6] = 37;
+  patternSelectButtons_[7] = 36;
+  patternSelectButtons_[8] = 44;
+  patternSelectButtons_[9] = 45;
+  patternSelectButtons_[10] = 46;
+  patternSelectButtons_[11] = 47;
+  patternSelectButtons_[12] = 20;
+  patternSelectButtons_[13] = 21;
+  patternSelectButtons_[14] = 22;
+  patternSelectButtons_[15] = 23;
+  instrumentSwitches_[0] =31;
+  instrumentSwitches_[1] =30;
+  instrumentSwitches_[2] =29;
+  instrumentSwitches_[3] =28;
+  instrumentSwitches_[4] =27;
+  instrumentSwitches_[5] =26;
+  instrumentSwitches_[6] =25;
+  instrumentSwitches_[7] =24;
+  instrumentSwitches_[8] =32;
+  instrumentSwitches_[9] =33;
+  
+  
+    
 }
 
 PatternView::~PatternView() {

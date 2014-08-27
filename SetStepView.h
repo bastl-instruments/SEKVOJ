@@ -8,13 +8,13 @@
 #ifndef SETSTEPVIEW_H_
 #define SETSTEPVIEW_H_
 
-#include <controls/IView.h>
-#include <hw/IHWLayer.h>
-#include <data/IStepMemory.h>
-#include <controls/RadioButtons.h>
-#include <controls/Switches.h>
-#include <players/Player.h>
-#include <DrumStepsView.h>
+#include <IView.h>
+#include <IHWLayer.h>
+#include <IStepMemory.h>
+#include <RadioButtons.h>
+#include <Switches.h>
+#include <Player.h>
+#include "DrumStepsView.h"
 
 class SetStepView : public IView {
 public:

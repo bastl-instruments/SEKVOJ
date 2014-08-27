@@ -1,27 +1,7 @@
 
+#ifdef EXTERNAL_IDE
 
 #include <Arduino.h>
-#include <portManipulations.h>
-#include <sekvojHW.h>
-#include <players/Player.h>
-#include <modules/Stepper.h>
-#include <players/ArduinoMIDICommandProcessor.h>
-#include <players/PlayerSettings.h>
-#include <data/FlashStepMemory.h>
-#include <MIDI.h>
-#include "MainMenuView.h"
-
-MIDI_CREATE_INSTANCE(HardwareSerial, Serial, MIDI);
-
-Player * player;
-Stepper * stepper;
-ArduinoMIDICommandProcessor * processor;
-FlashStepMemory * memory;
-PlayerSettings * settings;
-
-
-MainMenuView mainMenu;
-
 
 int main(void) {
 
@@ -33,6 +13,36 @@ int main(void) {
   }
 }
 
+#endif
+
+#include <portManipulations.h>
+#include "sekvojHW.h"
+#include <Player.h>
+#include <BastlMetronome.h>
+#include <ArduinoMIDICommandProcessor.h>
+#include <PlayerSettings.h>
+#include <FlashStepMemory.h>
+#include <MIDI.h>
+#include <SdFat.h>
+#include "MainMenuView.h"
+
+MIDI_CREATE_INSTANCE(HardwareSerial, Serial, MIDI);
+
+Player * player;
+BastlMetronome * stepper;
+ArduinoMIDICommandProcessor * processor;
+FlashStepMemory * memory;
+PlayerSettings * settings;
+
+//------------------------------------------------------------------------------
+// global variables
+Sd2Card card; // SD/SDHC card with support for version 2.00 features
+SdVolume vol; // FAT16 or FAT32 volume
+//SdFile root; // volume's root directory
+//SdFile file; // current file
+
+MainMenuView mainMenu;
+
 extern sekvojHW hardware;
 
 void stepperStep() {
@@ -41,19 +51,23 @@ void stepperStep() {
 
 void noteOn(unsigned char note, unsigned char velocity, unsigned char channel) {
 	 MIDI.sendNoteOn(35 + note, 127 ,channel);
+	 //hardware.clearDisplay();
+	 //hardware.writeDisplayNumber(note * 10);
 }
 
 void noteOff(unsigned char note, unsigned char velocity, unsigned char channel) {
 	MIDI.sendNoteOff(35 + note, velocity ,channel);
+	//hardware.clearDisplay();
+	//hardware.writeDisplayNumber(note * 10 + 1);
 }
 
-void test(uint8_t v) {}
+void test(uint8_t v) {
+}
 
 
 void initFlashMemory(FlashStepMemory * memory) {
 	DrumStep::DrumVelocityType inactiveSteps[4] = {DrumStep::OFF, DrumStep::OFF, DrumStep::OFF, DrumStep::OFF};
 	DrumStep::DrumVelocityType activeSteps[4] = {DrumStep::NORMAL, DrumStep::OFF, DrumStep::OFF, DrumStep::OFF};
-	DrumStep::DrumVelocityType emptyStep[4] = {DrumStep::OFF, DrumStep::OFF, DrumStep::OFF, DrumStep::OFF};
 	DrumStep activeDrumStep(true, true, activeSteps);
 	DrumStep emptyDrumStep(true, true , activeSteps);
 	DrumStep muteDrumStep(true, true, inactiveSteps);
@@ -79,7 +93,7 @@ void setup() {
 
 	hardware.init(&test);
 
-	stepper = new Stepper(&hardware);
+	stepper = new BastlMetronome(&hardware);
 	stepper->setBPM(100);
 	stepper->setStepCallback(&stepperStep);
 
@@ -102,7 +116,7 @@ void setup() {
 
 	hardware.clearDisplay();
 
-	mainMenu.init(&hardware, player, memory, settings);
+	mainMenu.init(&hardware, player, stepper, memory, settings, processor);
 }
 
 

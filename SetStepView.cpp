@@ -5,7 +5,7 @@
  *      Author: bastl
  */
 
-#include <SetStepView.h>
+#include "SetStepView.h"
 
 
 SetStepView::SetStepView() : hw_(0),
@@ -20,11 +20,24 @@ SetStepView::SetStepView() : hw_(0),
 								 instrumentButtons_(0),
 								 velocityRadio_(0),
 								 drumStepView_(0),
-								 instrumentButtonIndexes_{31, 30, 29, 28, 27, 26, 25, 24, 32, 33},
-								 panButtonIndexes_{15, 14, 13, 12},
-								 velocitySettingsIndexes_{34, 35},
 								 inSubStepMode_(false){
-
+  
+  instrumentButtonIndexes_[0] =31;
+  instrumentButtonIndexes_[1] =30;
+  instrumentButtonIndexes_[2] =29;
+  instrumentButtonIndexes_[3] =28;
+  instrumentButtonIndexes_[4] =27;
+  instrumentButtonIndexes_[5] =26;
+  instrumentButtonIndexes_[6] =25;
+  instrumentButtonIndexes_[7] =24;
+  instrumentButtonIndexes_[8] =32;
+  instrumentButtonIndexes_[9] =33;
+  panButtonIndexes_[0] = 15;
+  panButtonIndexes_[1] = 14;
+  panButtonIndexes_[2] = 13;
+  panButtonIndexes_[3] = 12;
+  velocitySettingsIndexes_[0] = 34;
+  velocitySettingsIndexes_[1] = 35;
 }
 
 SetStepView::~SetStepView() {

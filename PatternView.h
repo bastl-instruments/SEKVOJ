@@ -8,11 +8,11 @@
 #ifndef PATTERNVIEW_H_
 #define PATTERNVIEW_H_
 
-#include <controls/IView.h>
-#include <data/IStepMemory.h>
-#include <controls/RadioButtons.h>
-#include <controls/Switches.h>
-#include <players/PlayerSettings.h>
+#include <IView.h>
+#include <IStepMemory.h>
+#include <RadioButtons.h>
+#include <Switches.h>
+#include <PlayerSettings.h>
 
 class PatternView  : public IView {
 public:
