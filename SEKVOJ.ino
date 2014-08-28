@@ -29,7 +29,7 @@ int main(void) {
 MIDI_CREATE_INSTANCE(HardwareSerial, Serial, MIDI);
 
 Player * player;
-BastlMetronome * stepper;
+
 ArduinoMIDICommandProcessor * processor;
 FlashStepMemory * memory;
 PlayerSettings * settings;
@@ -42,6 +42,7 @@ SdVolume vol; // FAT16 or FAT32 volume
 //SdFile file; // current file
 
 MainMenuView mainMenu;
+BastlMetronome stepper;
 
 extern sekvojHW hardware;
 
@@ -92,10 +93,9 @@ void initFlashMemory(FlashStepMemory * memory) {
 void setup() {
 
 	hardware.init(&test);
-
-	stepper = new BastlMetronome(&hardware);
-	stepper->setBPM(100);
-	stepper->setStepCallback(&stepperStep);
+	stepper.init(&hardware);
+	stepper.setBPM(100);
+	stepper.setStepCallback(&stepperStep);
 
 	settings = new PlayerSettings();
 	settings->setCurrentPattern(0);
@@ -116,13 +116,13 @@ void setup() {
 
 	hardware.clearDisplay();
 
-	mainMenu.init(&hardware, player, stepper, memory, settings, processor);
+	mainMenu.init(&hardware, player, &stepper, memory, settings, processor);
 }
 
 
 
 void loop() {
-		stepper->update();
+		stepper.update();
 		mainMenu.update();
 }
 
