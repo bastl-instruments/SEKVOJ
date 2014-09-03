@@ -151,7 +151,7 @@ void sekvojHW::printLEDStates() {
 
 void sekvojHW::setLED(uint8_t number, IHWLayer::LedState state) {
 
-	if ((state == IHWLayer::ON) | (state==IHWLayer::BLINK)) {
+	if ((state == IHWLayer::ON) | (state==IHWLayer::BLINK) | (state==IHWLayer::DULLON)) {
 		ledStatesBeg[number/leds_cols] &= ~(1<<(number%leds_cols));
 	} else {
 		ledStatesBeg[number/leds_cols] |= (1<<(number%leds_cols));
