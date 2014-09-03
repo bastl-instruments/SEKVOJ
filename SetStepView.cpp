@@ -6,11 +6,14 @@
  */
 
 #include "SetStepView.h"
+#include <BitArrayOperations.h>
 
 
 SetStepView::SetStepView() : hw_(0),
 								 memory_(0),
 								 player_(0),
+								 instrumentBar_(0),
+								 buttonMap_(0),
 								 currentPattern_(0),
 								 currentPanIndex_(0),
 								 currentInstrumentIndex_(0),
@@ -21,23 +24,6 @@ SetStepView::SetStepView() : hw_(0),
 								 velocityRadio_(0),
 								 drumStepView_(0),
 								 inSubStepMode_(false){
-  
-  instrumentButtonIndexes_[0] =31;
-  instrumentButtonIndexes_[1] =30;
-  instrumentButtonIndexes_[2] =29;
-  instrumentButtonIndexes_[3] =28;
-  instrumentButtonIndexes_[4] =27;
-  instrumentButtonIndexes_[5] =26;
-  instrumentButtonIndexes_[6] =25;
-  instrumentButtonIndexes_[7] =24;
-  instrumentButtonIndexes_[8] =32;
-  instrumentButtonIndexes_[9] =33;
-  panButtonIndexes_[0] = 15;
-  panButtonIndexes_[1] = 14;
-  panButtonIndexes_[2] = 13;
-  panButtonIndexes_[3] = 12;
-  velocitySettingsIndexes_[0] = 34;
-  velocitySettingsIndexes_[1] = 35;
 }
 
 SetStepView::~SetStepView() {
@@ -47,26 +33,29 @@ SetStepView::~SetStepView() {
 	delete drumStepView_;
 }
 
-void SetStepView::init(IHWLayer * hw, IStepMemory * memory, Player * player, unsigned char pattern) {
+void SetStepView::init(IHWLayer * hw, IStepMemory * memory, Player * player, InstrumentBar * instrumentBar,
+					   SekvojButtonMap * buttonMap, unsigned char pattern) {
 	hw_ = hw;
 	memory_ = memory;
 	player_ = player;
+	instrumentBar_ = instrumentBar;
+	buttonMap_ = buttonMap;
 	currentPattern_ = pattern;
-	panButtons_ = new RadioButtons(hw, panButtonIndexes_, 4);
-	subStepSwitches_.init(hw, panButtonIndexes_, 4);
-	instrumentButtons_ = new RadioButtons(hw, instrumentButtonIndexes_, 10);
-	velocityRadio_ = new RadioButtons(hw_, velocitySettingsIndexes_, 2);
+	panButtons_ = new RadioButtons(hw, buttonMap_->getSubStepButtonArray(), 4);
+	subStepSwitches_.init(hw, buttonMap_->getSubStepButtonArray(), 4);
+	instrumentButtons_ = new RadioButtons(hw, buttonMap_->getInstrumentButtonArray(), 10);
+	velocityRadio_ = new RadioButtons(hw_, buttonMap_->getVelocityButtonArray(), 2);
 	drumStepView_ = new DrumStepsView();
-	drumStepView_->init(hw_);
+	drumStepView_->init(hw_, buttonMap_);
 	updateConfiguration();
 }
 
 void SetStepView::updateConfiguration() {
 	for (unsigned char i = 0; i < 4; i++) {
-		hw_->setLED(panButtonIndexes_[i], i == currentPanIndex_ ? IHWLayer::ON : IHWLayer::OFF);
+		hw_->setLED(buttonMap_->getSubStepButtonIndex(i), i == currentPanIndex_ ? IHWLayer::ON : IHWLayer::OFF);
 	}
 	for (unsigned char i = 0; i < 10; i++) {
-		hw_->setLED(instrumentButtonIndexes_[i], i == currentInstrumentIndex_ ? IHWLayer::ON : IHWLayer::OFF);
+		instrumentBar_->setInstrumentSelected(i, i == currentInstrumentIndex_);
 	}
 	updateMutes();
 }
@@ -81,17 +70,17 @@ void SetStepView::updateMutes() {
 void SetStepView::updateVelocity() {
 	velocityRadio_->update();
 	unsigned char newVelocity = 0;
-		if (currentVelocity_ != DrumStep::DOWN) hw_->setLED(velocitySettingsIndexes_[0], IHWLayer::OFF);
-		if (currentVelocity_ != DrumStep::UP) hw_->setLED(velocitySettingsIndexes_[1], IHWLayer::OFF);
-		hw_->setLED(velocitySettingsIndexes_[1], IHWLayer::OFF);
+		if (currentVelocity_ != DrumStep::DOWN) hw_->setLED(buttonMap_->getVelocityButtonIndex(0), IHWLayer::OFF);
+		if (currentVelocity_ != DrumStep::UP) hw_->setLED(buttonMap_->getVelocityButtonIndex(1), IHWLayer::OFF);
+		hw_->setLED(buttonMap_->getVelocityButtonIndex(1), IHWLayer::OFF);
 
 		if (velocityRadio_->getSelectedButton(newVelocity)) {
 			if (newVelocity == 0) {
 				currentVelocity_ = DrumStep::DOWN;
-				hw_->setLED(velocitySettingsIndexes_[0], IHWLayer::ON);
+				hw_->setLED(buttonMap_->getVelocityButtonIndex(0), IHWLayer::ON);
 			} else {
 				currentVelocity_ = DrumStep::UP;
-				hw_->setLED(velocitySettingsIndexes_[1], IHWLayer::ON);
+				hw_->setLED(buttonMap_->getVelocityButtonIndex(1), IHWLayer::ON);
 			}
 		} else {
 			currentVelocity_ = DrumStep::NORMAL;
@@ -124,19 +113,19 @@ void SetStepView::update() {
 			for (unsigned char i = 0; i < 4; i++) {
 				bool substepHasNote = step.getSubStep(i) != DrumStep::OFF;
 				anyOn = anyOn || substepHasNote;
-				hw_->setLED(panButtonIndexes_[i], substepHasNote ? IHWLayer::ON : IHWLayer::OFF);
+				hw_->setLED(buttonMap_->getSubStepButtonIndex(i), substepHasNote ? IHWLayer::ON : IHWLayer::OFF);
 				subStepSwitches_.setStatus(i, substepHasNote);
 			}
 			if (!anyOn) {
 				step.setSubStep(0, currentVelocity_);
 				memory_->setDrumStep(currentInstrumentIndex_, currentPattern_, (currentPanIndex_ * 16) + currentButtonDown, step);
-				hw_->setLED(panButtonIndexes_[0], IHWLayer::ON);
+				hw_->setLED(buttonMap_->getSubStepButtonIndex(0), IHWLayer::ON);
 				subStepSwitches_.setStatus(0, true);
 			}
 		} else {
 			inSubStepMode_ = false;
 			for (unsigned char i = 0; i < 4; i++) {
-				hw_->setLED(panButtonIndexes_[i], i == currentPanIndex_ ? IHWLayer::ON : IHWLayer::OFF);
+				hw_->setLED(buttonMap_->getSubStepButtonIndex(i), i == currentPanIndex_ ? IHWLayer::ON : IHWLayer::OFF);
 			}
 		}
 	}
@@ -148,7 +137,7 @@ void SetStepView::update() {
 			if (substepHasNote != subStepSwitches_.getStatus(i)) {
 				drumStepView_->setIgnoreOffs(true);
 				step.setSubStep(i, substepHasNote ? DrumStep::OFF : currentVelocity_);
-				hw_->setLED(panButtonIndexes_[i], !substepHasNote ? IHWLayer::ON : IHWLayer::OFF);
+				hw_->setLED(buttonMap_->getSubStepButtonIndex(i), !substepHasNote ? IHWLayer::ON : IHWLayer::OFF);
 				memory_->setDrumStep(currentInstrumentIndex_, currentPattern_, (currentPanIndex_ * 16) + currentButtonDown, step);
 			}
 		}
@@ -181,9 +170,9 @@ void SetStepView::update() {
 
 	unsigned char nextStep = player_->getCurrentInstrumentStep(currentInstrumentIndex_);
 	if (nextStep / 16 == currentPanIndex_) {
-		drumStepView_->setInvertedButton(nextStep % 16);
+		drumStepView_->setHighlightedButton(nextStep % 16);
 	} else {
-		drumStepView_->setInvertedButton(-1);
+		drumStepView_->setHighlightedButton(-1);
 	}
 }
 

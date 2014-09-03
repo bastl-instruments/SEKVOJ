@@ -13,28 +13,28 @@
 #include <RadioButtons.h>
 #include <Switches.h>
 #include <PlayerSettings.h>
+#include "InstrumentBar.h"
+#include "SekvojButtonMap.h"
 
 class PatternView  : public IView {
 public:
 	PatternView();
 	~PatternView();
-	void init(IHWLayer * hw, PlayerSettings * settigns, IStepMemory * memory);
+	void init(IHWLayer * hw, PlayerSettings * settigns, IStepMemory * memory, InstrumentBar * instrumentBar, SekvojButtonMap * buttonMap);
 	void update();
 private:
 
 	IHWLayer * hw_;
 	PlayerSettings * settings_;
 	IStepMemory * memory_;
+	InstrumentBar * instrumentBar_;
+	SekvojButtonMap * buttonMap_;
 
 	//Controls
-	Switches instrumentTopSwitches_;
-	Switches instrumentBottomSwitches_;
+	Switches instrumentSwitches_;
 	RadioButtons * patternSelectRadioButtons_;
 
-	unsigned char instrumentSwitches_[10];
-	unsigned char patternSelectButtons_[16];
-
-	unsigned char currentInstrumentStatuses_[3];
+	unsigned int currentInstrumentStatuses_;
 	unsigned char currentPattern_;
 
 	void reflectPatternChange();

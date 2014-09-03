@@ -16,12 +16,15 @@
 #include <Switches.h>
 #include <BastlMetronome.h>
 #include <Player.h>
+#include "InstrumentBar.h"
+#include "SekvojButtonMap.h"
 
 class SetActiveView : public IView {
 public:
 	SetActiveView();
 	~SetActiveView();
-	void init(IHWLayer * hw, IStepMemory * memory, Player * player, BastlMetronome * stepper_, unsigned char pattern);
+	void init(	IHWLayer * hw, IStepMemory * memory, Player * player, BastlMetronome * stepper, InstrumentBar * instrumentBar,
+				SekvojButtonMap * buttonMap, unsigned char pattern);
 	void update();
 	void updateActives();
 	void updateConfiguration();
@@ -30,6 +33,8 @@ private:
 	IStepMemory * memory_;
 	Player * player_;
 	BastlMetronome * stepper_;
+	InstrumentBar * instrumentBar_;
+	SekvojButtonMap * buttonMap_;
 
 
 	unsigned char currentPattern_;
@@ -40,10 +45,6 @@ private:
 
 	RadioButtons * panButtons_;
 	RadioButtons * instrumentButtons_;
-
-	unsigned char instrumentButtonIndexes_[10] ;
-	unsigned char stepButtonIndexes_[16] ;
-	unsigned char panButtonIndexes_[4] ;
 
 };
 

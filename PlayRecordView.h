@@ -10,25 +10,21 @@
 
 #include <IView.h>
 #include <IHWLayer.h>
-#include <ArduinoMIDICommandProcessor.h>
-#include <PlayerSettings.h>
-#include <Player.h>
+#include <StepRecorder.h>
 #include "DrumStepsView.h"
-#include <IStepMemory.h>
+#include "SekvojButtonMap.h"
+
 
 class PlayRecordView : public IView {
 public:
 	PlayRecordView();
 	~PlayRecordView();
-	void init(IHWLayer * hw, IMIDICommandProcessor * midiProcessor, PlayerSettings * settings, Player * player, IStepMemory * memory);
+	void init(IHWLayer * hw, StepRecorder * recorder, SekvojButtonMap * buttonMap);
 	void update();
 private:
 	IHWLayer * hw_;
-	IMIDICommandProcessor * midiProcessor_;
-	PlayerSettings * settings_;
-	Player * player_;
-	IStepMemory * memory_;
-	unsigned char instrumentButtonIndexes_[10];
+	StepRecorder * recorder_;
+	SekvojButtonMap * buttonMap_;
 	unsigned int currentStatus_;
 };
 
