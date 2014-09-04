@@ -15,12 +15,15 @@
 #include <Switches.h>
 #include <Player.h>
 #include "DrumStepsView.h"
+#include "InstrumentBar.h"
+#include "SekvojButtonMap.h"
 
 class SetStepView : public IView {
 public:
 	SetStepView();
 	~SetStepView();
-	void init(IHWLayer * hw, IStepMemory * memory, Player * player, unsigned char pattern);
+	void init(IHWLayer * hw, IStepMemory * memory, Player * player, InstrumentBar * instrumentBar,
+			SekvojButtonMap * buttonMap, unsigned char pattern);
 	void update();
 	void updateMutes();
 	void updateConfiguration();
@@ -29,6 +32,8 @@ private:
 	IHWLayer * hw_;
 	IStepMemory * memory_;
 	Player * player_;
+	InstrumentBar * instrumentBar_;
+	SekvojButtonMap * buttonMap_;
 
 	unsigned char currentPattern_;
 	unsigned char currentPanIndex_;
@@ -42,11 +47,6 @@ private:
 	RadioButtons * velocityRadio_;
 	Switches subStepSwitches_;
 	DrumStepsView * drumStepView_;
-
-	unsigned char instrumentButtonIndexes_[10] ;
-
-	unsigned char panButtonIndexes_[4] ;
-	unsigned char velocitySettingsIndexes_[2] ;
 
 	bool inSubStepMode_;
 

@@ -25,11 +25,13 @@ int main(void) {
 #include <MIDI.h>
 #include <SdFat.h>
 #include "MainMenuView.h"
+#include "InstrumentBar.h"
+#include <StepRecorder.h>
 
 MIDI_CREATE_INSTANCE(HardwareSerial, Serial, MIDI);
 
 Player * player;
-BastlMetronome * stepper;
+
 ArduinoMIDICommandProcessor * processor;
 FlashStepMemory * memory;
 PlayerSettings * settings;
@@ -42,6 +44,10 @@ SdVolume vol; // FAT16 or FAT32 volume
 //SdFile file; // current file
 
 MainMenuView mainMenu;
+BastlMetronome stepper;
+StepRecorder recorder;
+InstrumentBar instrumentBar;
+SekvojButtonMap buttonMap;
 
 extern sekvojHW hardware;
 
@@ -51,6 +57,10 @@ void stepperStep() {
 
 void noteOn(unsigned char note, unsigned char velocity, unsigned char channel) {
 	 MIDI.sendNoteOn(35 + note, 127 ,channel);
+	 unsigned char instrumentIndex;
+	 if (settings->getDrumInstrumentIndexFromMIDIMessage(channel, note, instrumentIndex)) {
+	 	instrumentBar.setInstrumentPlaying(instrumentIndex, true);
+	 }
 	 //hardware.clearDisplay();
 	 //hardware.writeDisplayNumber(note * 10);
 }
@@ -59,6 +69,20 @@ void noteOff(unsigned char note, unsigned char velocity, unsigned char channel) 
 	MIDI.sendNoteOff(35 + note, velocity ,channel);
 	//hardware.clearDisplay();
 	//hardware.writeDisplayNumber(note * 10 + 1);
+	unsigned char instrumentIndex;
+	if (settings->getDrumInstrumentIndexFromMIDIMessage(channel, note, instrumentIndex)) {
+		instrumentBar.setInstrumentPlaying(instrumentIndex, false);
+	}
+}
+
+void midiNoteOnIn(unsigned char channel, unsigned char note, unsigned char velocity) {
+	recorder.recordMIDINote(channel, note/*, velocity << 3*/);
+	hardware.setLED(15 - channel, IHWLayer::ON);
+	hardware.setLED(35 - note, IHWLayer::ON);
+}
+
+void midiNoteOffIn() {
+
 }
 
 void test(uint8_t v) {
@@ -92,10 +116,10 @@ void initFlashMemory(FlashStepMemory * memory) {
 void setup() {
 
 	hardware.init(&test);
-
-	stepper = new BastlMetronome(&hardware);
-	stepper->setBPM(100);
-	stepper->setStepCallback(&stepperStep);
+	instrumentBar.init(&hardware, &buttonMap);
+	stepper.init(&hardware);
+	stepper.setBPM(100);
+	stepper.setStepCallback(&stepperStep);
 
 	settings = new PlayerSettings();
 	settings->setCurrentPattern(0);
@@ -113,17 +137,20 @@ void setup() {
 	player = new Player(memory, processor, settings);
 	Serial.end();
 	MIDI.begin(0);
+	MIDI.setHandleNoteOn(&midiNoteOnIn);
 
 	hardware.clearDisplay();
 
-	mainMenu.init(&hardware, player, stepper, memory, settings, processor);
+	recorder.init(player, memory, settings);
+	mainMenu.init(&hardware, player, & recorder,  &stepper, memory, settings, processor, &instrumentBar, &buttonMap);
 }
 
 
 
 void loop() {
-		stepper->update();
-		mainMenu.update();
+	MIDI.read();
+	stepper.update();
+	mainMenu.update();
 }
 
 

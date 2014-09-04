@@ -11,28 +11,29 @@
 #include <IView.h>
 #include <IHWLayer.h>
 #include <Switches.h>
+#include "SekvojButtonMap.h"
 
 class DrumStepsView : public IView {
 public:
 	DrumStepsView();
 	~DrumStepsView();
-	void init(IHWLayer * hw);
+	void init(IHWLayer * hw, SekvojButtonMap * buttonMap);
 	void update();
 	void setStatus(unsigned int status);
 	bool getDownButton(unsigned char & button);
 	unsigned int getNewOffs();
 	unsigned int getNewOns();
-	void setInvertedButton(unsigned char index);
+	void setHighlightedButton(unsigned char index);
 	void setIgnoreOffs(bool ignoreOffs);
 private:
 	IHWLayer * hw_;
+	SekvojButtonMap * buttonMap_;
 	unsigned int currentStatus_;
 	unsigned int lastStatus_;
 	Switches stepSwitches_;
-	unsigned char stepButtonIndexes_[16];
 	char currentDownButton_;
 	bool ignoreOffs_;
-	char invertedButton_;
+	char highlightedButton_;
 };
 
 inline bool DrumStepsView::getDownButton(unsigned char & button) {

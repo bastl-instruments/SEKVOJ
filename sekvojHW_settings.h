@@ -38,8 +38,9 @@
 //        -------------
 //  0    duty         total
 
-#define blinkTotal 20
-#define blinkDuty  10
+#define blinkTotal 2
+#define blinkDuty  1
+
 
 
 //

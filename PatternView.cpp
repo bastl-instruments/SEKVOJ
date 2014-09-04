@@ -7,103 +7,73 @@
 
 #include "PatternView.h"
 #include <InstrumentDefinitions.h>
+#include <BitArrayOperations.h>
 
-PatternView::PatternView() : hw_(0), settings_(0), memory_(0),
+PatternView::PatternView() : hw_(0), settings_(0), memory_(0), instrumentBar_(0),
 							 patternSelectRadioButtons_(0),
 							 currentPattern_(0) {
-  currentInstrumentStatuses_[0] = 0;
-  currentInstrumentStatuses_[1] = 0;
-  currentInstrumentStatuses_[2] = 0;
-  patternSelectButtons_[0] = 43;
-  patternSelectButtons_[1] = 42;
-  patternSelectButtons_[2] = 41;
-  patternSelectButtons_[3] = 40;
-  patternSelectButtons_[4] = 39;
-  patternSelectButtons_[5] = 38;
-  patternSelectButtons_[6] = 37;
-  patternSelectButtons_[7] = 36;
-  patternSelectButtons_[8] = 44;
-  patternSelectButtons_[9] = 45;
-  patternSelectButtons_[10] = 46;
-  patternSelectButtons_[11] = 47;
-  patternSelectButtons_[12] = 20;
-  patternSelectButtons_[13] = 21;
-  patternSelectButtons_[14] = 22;
-  patternSelectButtons_[15] = 23;
-  instrumentSwitches_[0] =31;
-  instrumentSwitches_[1] =30;
-  instrumentSwitches_[2] =29;
-  instrumentSwitches_[3] =28;
-  instrumentSwitches_[4] =27;
-  instrumentSwitches_[5] =26;
-  instrumentSwitches_[6] =25;
-  instrumentSwitches_[7] =24;
-  instrumentSwitches_[8] =32;
-  instrumentSwitches_[9] =33;
-  
-  
-    
+  currentInstrumentStatuses_ = 0;
 }
 
 PatternView::~PatternView() {
 	delete patternSelectRadioButtons_;
 }
 
-void PatternView::init(IHWLayer * hw, PlayerSettings * settigns, IStepMemory * memory) {
+void PatternView::init(IHWLayer * hw, PlayerSettings * settigns, IStepMemory * memory, InstrumentBar * instrumentBar, SekvojButtonMap * buttonMap) {
 	hw_ = hw;
 	settings_ = settigns;
 	memory_ = memory;
+	instrumentBar_ = instrumentBar;
+	buttonMap_ = buttonMap;
 	currentPattern_ = settings_->getCurrentPattern();
 
-	instrumentBottomSwitches_.init(hw_, instrumentSwitches_, 8);
-	instrumentTopSwitches_.init(hw_, &instrumentSwitches_[8], 2);
-	patternSelectRadioButtons_ = new RadioButtons(hw_, patternSelectButtons_, 16);
+	instrumentSwitches_.init(hw_, buttonMap_->getInstrumentButtonArray(), 10);
+	patternSelectRadioButtons_ = new RadioButtons(hw_, buttonMap_->getStepButtonArray(), 16);
 	patternSelectRadioButtons_->setSelectedButton(currentPattern_);
 
 	for (unsigned char i = 0; i < 16; i++) {
-		hw_->setLED(patternSelectButtons_[i], (i == currentPattern_)  ? IHWLayer::ON : IHWLayer::OFF);
+		hw_->setLED(buttonMap_->getStepButtonIndex(i), (i == currentPattern_)  ? IHWLayer::ON : IHWLayer::OFF);
 	}
 	reflectPatternChange();
 }
 
 void PatternView::reflectPatternChange() {
 	settings_->setCurrentPattern(currentPattern_);
-	memory_->getPatternSettings(currentPattern_, currentInstrumentStatuses_);
+	unsigned char allDrumSettings[3];
+	memory_->getPatternSettings(currentPattern_, &allDrumSettings[0]);
+	currentInstrumentStatuses_ = allDrumSettings[1] << 8 | allDrumSettings[0];
 	for (unsigned char i = 0; i < 10; i++) {
-		bool instrumentStatus = GETBIT(currentInstrumentStatuses_[i / 8], i % 8);
-		hw_->setLED(instrumentSwitches_[i], instrumentStatus ? IHWLayer::ON : IHWLayer::OFF);
+		bool instrumentStatus = GETBIT(currentInstrumentStatuses_, i);
+		instrumentBar_->setInstrumentSelected(i, instrumentStatus);
 		settings_->setInstrumentOn(InstrumentTypes::DRUM, i, instrumentStatus);
-		Switches * currentSwitches = (i / 8 == 0) ? &instrumentBottomSwitches_ : &instrumentTopSwitches_;
-		currentSwitches->setStatus(i % 8, instrumentStatus);
+		instrumentSwitches_.setStatus(i, instrumentStatus);
 	}
 }
 
 void PatternView::update() {
 	patternSelectRadioButtons_->update();
-	instrumentBottomSwitches_.update();
-	instrumentTopSwitches_.update();
+	instrumentSwitches_.update();
 
 	unsigned char newPattern = 0;
 	if (patternSelectRadioButtons_->getSelectedButton(newPattern) && newPattern != currentPattern_) {
-		hw_->setLED(patternSelectButtons_[currentPattern_], IHWLayer::OFF);
-		hw_->setLED(patternSelectButtons_[newPattern], IHWLayer::ON);
+		hw_->setLED(buttonMap_->getStepButtonIndex(currentPattern_), IHWLayer::OFF);
+		hw_->setLED(buttonMap_->getStepButtonIndex(newPattern), IHWLayer::ON);
 		currentPattern_ = newPattern;
 		reflectPatternChange();
 		return;
 	}
 	for (unsigned char i = 0; i < 10; i++) {
-		Switches * currentSwitches = (i / 8 == 0) ? &instrumentBottomSwitches_ : &instrumentTopSwitches_;
-		bool newStatus = currentSwitches->getStatus(i % 8);
-		bool oldStatus = GETBIT(currentInstrumentStatuses_[i / 8], i % 8);
+		bool newStatus = instrumentSwitches_.getStatus(i);
+		bool oldStatus = GETBIT(currentInstrumentStatuses_, i);
 		if (newStatus != oldStatus) {
 			settings_->setInstrumentOn(InstrumentTypes::DRUM, i, newStatus);
-			if (newStatus) {
-				SETBITTRUE(currentInstrumentStatuses_[i / 8], i % 8);
-			} else {
-				SETBITFALSE(currentInstrumentStatuses_[i / 8], i % 8);
-			}
-			memory_->setPatternSettings(currentPattern_, currentInstrumentStatuses_);
-			hw_->setLED(instrumentSwitches_[i], newStatus ? IHWLayer::ON : IHWLayer::OFF);
+			SETBIT(currentInstrumentStatuses_, i, newStatus);
+			unsigned char allDrumSettings[3];
+			allDrumSettings[0] = (currentInstrumentStatuses_ << 8) >> 8;
+			allDrumSettings[1] = currentInstrumentStatuses_ >> 8;
+			allDrumSettings[2] = 0;
+			memory_->setPatternSettings(currentPattern_, &allDrumSettings[0]);
+			instrumentBar_->setInstrumentSelected(i, newStatus);
 		}
 	}
 }
