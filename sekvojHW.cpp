@@ -180,6 +180,7 @@ void sekvojHW::isr_updateNextLEDRow() {
 
 	shiftRegFast::enableOutput();
 
+	// go no next row
 	currentRow=(currentRow+1)%leds_rows;
 	if (currentRow == 0) blinkCounter = (blinkCounter+1)%blinkCompare[1];
 }
