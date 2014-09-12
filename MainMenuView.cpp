@@ -74,6 +74,9 @@ void MainMenuView::update() {
 	unsigned char newIndex = 0;
 	bool buttonSelected = modeButtons_->getSelectedButton(newIndex);
 	if (buttonSelected && newIndex != currentViewIndex_) {
+		for (int i = 0; i < 36; i++) {
+			hw_->setLED(buttonMap_->getButtonIndex(i), IHWLayer::OFF);
+		}
 		hw_->setLED(buttonMap_->getMainMenuButtonIndex(currentViewIndex_), IHWLayer::OFF);
 		hw_->setLED(buttonMap_->getMainMenuButtonIndex(newIndex), IHWLayer::ON);
 		currentViewIndex_ = newIndex;

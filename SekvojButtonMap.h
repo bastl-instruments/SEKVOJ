@@ -18,6 +18,7 @@
 class SekvojButtonMap {
 public:
 	SekvojButtonMap();
+	unsigned char getButtonIndex(unsigned char index);
 	unsigned char getMainMenuButtonIndex(unsigned char index);
 	unsigned char getInstrumentButtonIndex(unsigned char index);
 	unsigned char getStepButtonIndex(unsigned char index);
@@ -31,6 +32,10 @@ public:
 private:
 	unsigned char buttonIndexes_[36];
 };
+
+inline unsigned char SekvojButtonMap::getButtonIndex(unsigned char index) {
+	return buttonIndexes_[index];
+}
 
 inline unsigned char SekvojButtonMap::getMainMenuButtonIndex(unsigned char index) {
 	return buttonIndexes_[FIRST_MAIN_MENU_BUTTON_INDEX + index];
