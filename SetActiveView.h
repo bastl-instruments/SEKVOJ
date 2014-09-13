@@ -14,7 +14,6 @@
 #include <IStepMemory.h>
 #include <RadioButtons.h>
 #include <Switches.h>
-#include <BastlMetronome.h>
 #include <Player.h>
 #include "InstrumentBar.h"
 #include "SekvojButtonMap.h"
@@ -23,7 +22,7 @@ class SetActiveView : public IView {
 public:
 	SetActiveView();
 	~SetActiveView();
-	void init(	IHWLayer * hw, IStepMemory * memory, Player * player, BastlMetronome * stepper, InstrumentBar * instrumentBar,
+	void init(	IHWLayer * hw, IStepMemory * memory, Player * player, InstrumentBar * instrumentBar,
 				SekvojButtonMap * buttonMap, unsigned char pattern);
 	void update();
 	void updateActives();
@@ -32,7 +31,6 @@ private:
 	IHWLayer * hw_;
 	IStepMemory * memory_;
 	Player * player_;
-	BastlMetronome * stepper_;
 	InstrumentBar * instrumentBar_;
 	SekvojButtonMap * buttonMap_;
 

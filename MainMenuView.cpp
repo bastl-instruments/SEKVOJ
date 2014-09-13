@@ -11,7 +11,7 @@
 #include "SetStepView.h"
 #include "PlayRecordView.h"
 
-MainMenuView::MainMenuView() : hw_(0), player_(0), recorder_(0), stepper_(0), memory_(0), settings_(0), midiProcessor_(0),
+MainMenuView::MainMenuView() : hw_(0), player_(0), recorder_(0), memory_(0), settings_(0), midiProcessor_(0),
 							   instrumentBar_(0), buttonMap_(0), currentView_(0), currentViewIndex_(0), currentPattern_(0),
 							   modeButtons_(0) {
 }
@@ -20,13 +20,12 @@ MainMenuView::~MainMenuView() {
 	delete modeButtons_;
 }
 
-void MainMenuView::init(IHWLayer * hw, Player * player, StepRecorder * recorder, BastlMetronome * stepper,
+void MainMenuView::init(IHWLayer * hw, Player * player, StepRecorder * recorder,
 						IStepMemory * memory, PlayerSettings * settings, IMIDICommandProcessor * midiProcessor,
 						InstrumentBar * instrumentBar, SekvojButtonMap * buttonMap) {
 	hw_ = hw;
 	player_ = player;
 	recorder_ = recorder;
-	stepper_ = stepper;
 	memory_ = memory;
 	settings_ = settings;
 	midiProcessor_ = midiProcessor;
@@ -45,7 +44,7 @@ void MainMenuView::createView(unsigned char viewIndex) {
 	switch (viewIndex) {
 	case 0: {
 		SetActiveView * activeView = new SetActiveView();
-		activeView->init(hw_, memory_, player_, stepper_, instrumentBar_, buttonMap_, settings_->getCurrentPattern());
+		activeView->init(hw_, memory_, player_, instrumentBar_, buttonMap_, settings_->getCurrentPattern());
 		currentView_ = (IView*)activeView;
 		break;
 	}

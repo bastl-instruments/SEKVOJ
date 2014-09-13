@@ -28,6 +28,9 @@ public:
 	// set the state of a led
 	virtual void setLED(uint8_t number, IHWLayer::LedState state);
 
+	// set the state of a led
+	virtual void setLED(uint8_t number, uint8_t number2, uint8_t number3 = 0) {}
+
 	// print the state arrays to the Serial terminal
 	void printLEDStates();
 
@@ -104,6 +107,12 @@ public:
 	void isr_updateButtons();
 	void isr_sendDisplayBuffer();
 	inline void incrementBastlCycles() {bastlCycles++;}
+
+	/**EEPROM**/
+
+	virtual void readEEPROM(uint8_t pageNumb, uint8_t* byteArray, uint16_t numbBytes){}
+	virtual void readEEPROMDirect(uint16_t address, uint8_t* byteArray, uint16_t numbBytes){}
+	virtual bool isEEPROMBusy(){return true;}
 
 
 private:

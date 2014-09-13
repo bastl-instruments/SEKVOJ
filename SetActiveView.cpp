@@ -11,7 +11,6 @@
 SetActiveView::SetActiveView() : hw_(0),
 								 memory_(0),
 								 player_(0),
-								 stepper_(0),
 								 instrumentBar_(0),
 								 buttonMap_(0),
 								 currentPattern_(0),
@@ -27,11 +26,10 @@ SetActiveView::~SetActiveView() {
 	delete instrumentButtons_;
 }
 
-void SetActiveView::init(IHWLayer * hw, IStepMemory * memory, Player * player, BastlMetronome * stepper,
+void SetActiveView::init(IHWLayer * hw, IStepMemory * memory, Player * player,
 						 InstrumentBar * instrumentBar, SekvojButtonMap * buttonMap, unsigned char pattern) {
 	hw_ = hw;
 	memory_ = memory;
-	stepper_ = stepper;
 	player_ = player;
 	currentPattern_ = pattern;
 	instrumentBar_ = instrumentBar;
@@ -102,7 +100,7 @@ void SetActiveView::update() {
 						hw_->setLED(buttonMap_->getStepButtonIndex(stepIndex % 16), newState ? IHWLayer::ON : IHWLayer::OFF);
 					}
 				}
-				player_->setCurrentInstrumentStep(currentInstrumentIndex_, (stepper_->getCurrentStepIndex() / 4) % (pressedStep + 1));
+				player_->changeActivesForCurrentStep(currentInstrumentIndex_, pressedStep + 1);
 			}
 
 		}

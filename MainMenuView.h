@@ -23,7 +23,7 @@ class MainMenuView : public IView {
 public:
 	MainMenuView();
 	~MainMenuView();
-	void init(IHWLayer * hw, Player * player, StepRecorder * recorder, BastlMetronome * stepper,
+	void init(IHWLayer * hw, Player * player, StepRecorder * recorder,
 			  IStepMemory * memory, PlayerSettings * settings, IMIDICommandProcessor * midiProcessor,
 			  InstrumentBar * instrumentBar, SekvojButtonMap * buttonMap);
 	void update();
@@ -32,7 +32,6 @@ private:
 	IHWLayer * hw_;
 	Player * player_;
 	StepRecorder * recorder_;
-	BastlMetronome * stepper_;
 	IStepMemory * memory_;
 	PlayerSettings * settings_;
 	IMIDICommandProcessor * midiProcessor_;

@@ -18,7 +18,8 @@ int main(void) {
 #include <portManipulations.h>
 #include "sekvojHW.h"
 #include <Player.h>
-#include <BastlMetronome.h>
+#include <StepGenerator.h>
+#include <BPMConverter.h>
 #include <ArduinoMIDICommandProcessor.h>
 #include <PlayerSettings.h>
 #include <FlashStepMemory.h>
@@ -27,6 +28,7 @@ int main(void) {
 #include "MainMenuView.h"
 #include "InstrumentBar.h"
 #include <StepRecorder.h>
+#include <StepSynchronizer.h>
 
 MIDI_CREATE_INSTANCE(HardwareSerial, Serial, MIDI);
 
@@ -44,15 +46,17 @@ SdVolume vol; // FAT16 or FAT32 volume
 //SdFile file; // current file
 
 MainMenuView mainMenu;
-BastlMetronome stepper;
+StepGenerator stepper;
 StepRecorder recorder;
 InstrumentBar instrumentBar;
 SekvojButtonMap buttonMap;
+StepSynchronizer synchronizer;
 
 extern sekvojHW hardware;
 
 void stepperStep() {
 	player->stepFourth();
+	synchronizer.doStep();
 }
 
 void noteOn(unsigned char note, unsigned char velocity, unsigned char channel) {
@@ -117,8 +121,7 @@ void setup() {
 
 	hardware.init(&test);
 	instrumentBar.init(&hardware, &buttonMap);
-	stepper.init(&hardware);
-	stepper.setBPM(100);
+	stepper.setTimeUnitsPerStep(BPMConverter::bpmToTimeUnits(100, hardware.getBastlCyclesPerSecond()));
 	stepper.setStepCallback(&stepperStep);
 
 	settings = new PlayerSettings();
@@ -134,7 +137,7 @@ void setup() {
 	initFlashMemory(memory);
 
 	processor = new ArduinoMIDICommandProcessor(&noteOn, &noteOff);
-	player = new Player(memory, processor, settings);
+	player = new Player(memory, processor, settings, &synchronizer);
 	Serial.end();
 	MIDI.begin(0);
 	MIDI.setHandleNoteOn(&midiNoteOnIn);
@@ -142,14 +145,14 @@ void setup() {
 	hardware.clearDisplay();
 
 	recorder.init(player, memory, settings);
-	mainMenu.init(&hardware, player, & recorder,  &stepper, memory, settings, processor, &instrumentBar, &buttonMap);
+	mainMenu.init(&hardware, player, & recorder, memory, settings, processor, &instrumentBar, &buttonMap);
 }
 
 
 
 void loop() {
 	MIDI.read();
-	stepper.update();
+	stepper.update(hardware.getElapsedBastlCycles());
 	mainMenu.update();
 }
 
